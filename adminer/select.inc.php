@@ -9,6 +9,7 @@ parse_str($_COOKIE["adminer_import"], $adminer_import);
 
 $rights = array(); // privilege => 0
 $columns = array(); // selectable columns
+$search_columns = array(); // searchable columns
 $text_length = null;
 foreach ($fields as $key => $field) {
 	$name = $adminer->fieldName($field);
@@ -17,6 +18,9 @@ foreach ($fields as $key => $field) {
 		if (is_shortable($field)) {
 			$text_length = $adminer->selectLengthProcess();
 		}
+	}
+	if (isset($field["privileges"]["where"]) && $name != "") {
+		$search_columns[$key] = html_entity_decode(strip_tags($name), ENT_QUOTES);
 	}
 	$rights += $field["privileges"];
 }
@@ -246,7 +250,7 @@ if (!$columns && support("table")) {
 	echo '<input type="submit" value="' . h(lang('Select')) . '">'; # hidden default submit so filter remove buttons aren't "clicked" on submission from enter key
 	echo "</div>\n";
 	$adminer->selectColumnsPrint($select, $columns);
-	$adminer->selectSearchPrint($where, $columns, $indexes);
+	$adminer->selectSearchPrint($where, $search_columns, $indexes);
 	$adminer->selectOrderPrint($order, $columns, $indexes);
 	$adminer->selectLimitPrint($limit);
 	$adminer->selectLengthPrint($text_length);
@@ -337,7 +341,7 @@ if (!$columns && support("table")) {
 						echo apply_sql_function($val["fun"] ?? null, $name) . "</a>"; //! columns looking like functions
 						echo "<span class='column hidden'>";
 						echo "<a href='" . h($href . $desc) . "' title='" . lang('descending') . "' class='text'> ↓</a>";
-						if (isset($val["fun"]) === false) {
+						if (isset($val["fun"]) === false && isset($field["privileges"]["where"])) {
 							echo '<a href="#fieldset-search" title="' . lang('Search') . '" class="text jsonly"> =</a>';
 							echo script("qsl('a').onclick = partial(selectSearch, '" . js_escape($key) . "');");
 						}
@@ -437,7 +441,7 @@ if (!$columns && support("table")) {
 						$value = null;
 						if (isset($_POST["val"][$unique_idf][bracket_escape($key)])) {
 							$_POST["val"][$unique_idf][bracket_escape($key)];
-						}	
+						}
 						$editable = !is_array($row[$key]) && is_utf8($val) && $rows[$n][$key] == $row[$key] && !$functions[$key];
 						$text = preg_match('~text|lob~', $field["type"] ?? null);
 						echo "<td id='$id'";
