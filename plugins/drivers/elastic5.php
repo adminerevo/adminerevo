@@ -1,14 +1,12 @@
 <?php
-$drivers["elastic7"] = "Elasticsearch 7 (beta)";
+add_driver("elastic5", "Elasticsearch 5 (beta)");
 
-if (isset($_GET["elastic7"])) {
-	define("DRIVER", "elastic7");
+if (isset($_GET["elastic5"])) {
+	define("DRIVER", "elastic5");
 
-	if (function_exists('json_decode') && ini_bool('allow_url_fopen')) {
-		define("ELASTIC_DB_NAME", "elastic");
-
+	if (ini_bool('allow_url_fopen')) {
 		class Min_DB {
-			var $extension = "JSON", $server_info, $errno, $error, $_url;
+			var $extension = "JSON", $server_info, $errno, $error, $_url, $_db;
 
 			/**
 			 * @param string $path
@@ -42,10 +40,9 @@ if (isset($_GET["elastic7"])) {
 				if (!preg_match('~^HTTP/[0-9.]+ 2~i', $http_response_header[0])) {
 					if (isset($return['error']['root_cause'][0]['type'])) {
 						$this->error = $return['error']['root_cause'][0]['type'] . ": " . $return['error']['root_cause'][0]['reason'];
-					} elseif (isset($return['status']) && isset($return['error']) && is_string($return['error'])) {
-						$this->error = $return['error'];
+					} else {
+						$this->error = lang('Invalid server or credentials.');
 					}
-
 					return false;
 				}
 
@@ -68,7 +65,7 @@ if (isset($_GET["elastic7"])) {
 					return $driver->select($matches[1], array("*"), $where, null, array(), $matches[3]);
 				}
 
-				return $this->rootQuery($path, $content, $method);
+				return $this->rootQuery(($this->_db != "" ? "$this->_db/" : "/") . ltrim($path, '/'), $content, $method);
 			}
 
 			/**
@@ -95,6 +92,8 @@ if (isset($_GET["elastic7"])) {
 			}
 
 			function select_db($database) {
+				$this->_db = $database;
+
 				return true;
 			}
 
@@ -131,8 +130,6 @@ if (isset($_GET["elastic7"])) {
 	class Min_Driver extends Min_SQL {
 
 		function select($table, $select, $where, $group, $order = array(), $limit = 1, $page = 0, $print = false) {
-			global $adminer;
-
 			$data = array();
 			if ($select != array("*")) {
 				$data["fields"] = $select;
@@ -182,34 +179,37 @@ if (isset($_GET["elastic7"])) {
 				}
 			}
 
-			$query = "$table/_search";
+			$query = (min_version(7) ? "" : "$table/") . "_search";
 			$start = microtime(true);
-			$search = $this->_conn->rootQuery($query, $data);
+			$search = $this->_conn->query($query, $data);
 
 			if ($print) {
-				echo $adminer->selectQuery("$query: " . json_encode($data), $start, !$search);
+				echo adminer()->selectQuery("$query: " . json_encode($data), $start, !$search);
 			}
-			if (empty($search)) {
+			if (!$search) {
 				return false;
 			}
 
 			$return = array();
-			foreach ($search["hits"]["hits"] as $hit) {
+			foreach ($search['hits']['hits'] as $hit) {
 				$row = array();
 				if ($select == array("*")) {
 					$row["_id"] = $hit["_id"];
 				}
 
+				$fields = $hit['_source'];
 				if ($select != array("*")) {
 					$fields = array();
 					foreach ($select as $key) {
-						$fields[$key] = $key == "_id" ? $hit["_id"] : $hit["_source"][$key];
+						$fields[$key] = $key == "_id" ? [$hit["_id"]] : $hit['fields'][$key];
 					}
-				} else {
-					$fields = $hit["_source"];
 				}
+
 				foreach ($fields as $key => $val) {
-					$row[$key] = (is_array($val) ? json_encode($val) : $val);
+					if ($data["fields"]) {
+						$val = $val[0];
+					}
+					$row[$key] = (is_array($val) ? json_encode($val) : $val); //! display JSON and others differently
 				}
 
 				$return[] = $row;
@@ -240,7 +240,7 @@ if (isset($_GET["elastic7"])) {
 			return $response['created'];
 		}
 
-		function delete($table, $queryWhere, $limit = 0) {
+		function delete($type, $queryWhere, $limit = 0) {
 			//! use $limit
 			$ids = array();
 			if (isset($_GET["where"]["_id"]) && $_GET["where"]["_id"]) {
@@ -258,9 +258,9 @@ if (isset($_GET["elastic7"])) {
 			$this->_conn->affected_rows = 0;
 
 			foreach ($ids as $id) {
-				$query = "$table/_doc/$id";
+				$query = "{$type}/{$id}";
 				$response = $this->_conn->query($query, null, 'DELETE');
-				if (isset($response['result']) && $response['result'] == 'deleted') {
+				if ((isset($response['found']) && $response['found']) || (isset($response['result']) && $response['result'] == 'deleted')) {
 					$this->_conn->affected_rows++;
 				}
 			}
@@ -273,12 +273,19 @@ if (isset($_GET["elastic7"])) {
 		}
 	}
 
-	function connect() {
-		global $adminer;
+	/**
+	 * @param string $hostPath
+	 * @return bool
+	 */
+	function is_server_host_valid($hostPath)
+	{
+		return strpos(rtrim($hostPath, '/'), '/') === false;
+	}
 
+	function connect() {
 		$connection = new Min_DB;
 
-		list($server, $username, $password) = $adminer->credentials();
+		list($server, $username, $password) = adminer()->credentials();
 		if ($password != "" && $connection->connect($server, $username, "")) {
 			return lang('Database does not support password.');
 		}
@@ -291,19 +298,23 @@ if (isset($_GET["elastic7"])) {
 	}
 
 	function support($feature) {
-		return preg_match("~table|columns~", $feature);
+		return preg_match("~database|table|columns~", $feature);
 	}
 
 	function logged_user() {
-		global $adminer;
-
-		$credentials = $adminer->credentials();
+		$credentials = adminer()->credentials();
 
 		return $credentials[1];
 	}
 
 	function get_databases() {
-		return array(ELASTIC_DB_NAME);
+		$return = connection()->rootQuery('_aliases');
+		if ($return) {
+			$return = array_keys($return);
+			sort($return, SORT_STRING);
+		}
+
+		return $return;
 	}
 
 	function limit($query, $where, $limit, $offset = 0, $separator = " ") {
@@ -323,117 +334,74 @@ if (isset($_GET["elastic7"])) {
 	}
 
 	function count_tables($databases) {
-		global $connection;
+		$return = array();
 
-		$return = $connection->rootQuery('_aliases');
-		if (empty($return)) {
-			return array(
-				ELASTIC_DB_NAME => 0
-			);
+		$result = connection()->query('_stats');
+		if ($result && $result['indices']) {
+			$indices = $result['indices'];
+			foreach ($indices as $indice => $stats) {
+				$indexing = $stats['total']['indexing'];
+				$return[$indice] = $indexing['index_total'];
+			}
 		}
 
-		return array(
-			ELASTIC_DB_NAME => count($return)
-		);
+		return $return;
 	}
 
 	function tables_list() {
-		global $connection;
-
-		$aliases = $connection->rootQuery('_aliases');
-		if (empty($aliases)) {
-			return array();
+		if (min_version(7)) {
+			return array('_doc' => 'table');
 		}
 
-		ksort($aliases);
-
-		$tables = array();
-		foreach ($aliases as $name => $index) {
-			$tables[$name] = "table";
-
-			ksort($index["aliases"]);
-			$tables += array_fill_keys(array_keys($index["aliases"]), "view");
+		$return = connection()->query('_mapping');
+		if ($return) {
+			$return = array_fill_keys(array_keys($return[connection()->_db]["mappings"]), 'table');
 		}
 
-		return $tables;
+		return $return;
 	}
 
 	function table_status($name = "", $fast = false) {
-		global $connection;
+		$search = connection()->query("_search", array(
+			"size" => 0,
+			"aggregations" => array(
+				"count_by_type" => array(
+					"terms" => array(
+						"field" => "_type"
+					)
+				)
+			)
+		), "POST");
 
-		$stats = $connection->rootQuery('_stats');
-		$aliases = $connection->rootQuery('_aliases');
+		$return = array();
 
-		if (empty($stats) || empty($aliases)) {
-			return array();
-		}
+		if ($search) {
+			$tables = $search["aggregations"]["count_by_type"]["buckets"];
 
-		$result = array();
+			foreach ($tables as $table) {
+				$return[$table["key"]] = array(
+					"Name" => $table["key"],
+					"Engine" => "table",
+					"Rows" => $table["doc_count"],
+				);
 
-		if ($name != "") {
-			if (isset($stats["indices"][$name])) {
-				return format_index_status($name, $stats["indices"][$name]);
-			} else foreach ($aliases as $index_name => $index) {
-				foreach ($index["aliases"] as $alias_name => $alias) {
-					if ($alias_name == $name) {
-						return format_alias_status($alias_name, $stats["indices"][$index_name]);
-					}
+				if ($name != "" && $name == $table["key"]) {
+					return $return[$name];
 				}
 			}
 		}
 
-		ksort($stats["indices"]);
-		foreach ($stats["indices"] as $name => $index) {
-			if ($name[0] == ".") {
-				continue;
-			}
-
-			$result[$name] = format_index_status($name, $index);
-
-			if (!empty($aliases[$name]["aliases"])) {
-				ksort($aliases[$name]["aliases"]);
-				foreach ($aliases[$name]["aliases"] as $alias_name => $alias) {
-					$result[$alias_name] = format_alias_status($alias_name, $stats["indices"][$name]);
-				}
-			}
-		}
-
-		return $result;
-	}
-
-	function format_index_status($name, $index) {
-		return array(
-			"Name" => $name,
-			"Engine" => "Lucene",
-			"Oid" => $index["uuid"],
-			"Rows" => $index["total"]["docs"]["count"],
-			"Auto_increment" => 0,
-			"Data_length" => $index["total"]["store"]["size_in_bytes"],
-			"Index_length" => 0,
-			"Data_free" => $index["total"]["store"]["reserved_in_bytes"],
-		);
-	}
-
-	function format_alias_status($name, $index) {
-		return array(
-			"Name" => $name,
-			"Engine" => "view",
-			"Rows" => $index["total"]["docs"]["count"],
-		);
-	}
-
-	function is_view($table_status) {
-		return $table_status["Engine"] == "view";
+		return $return;
 	}
 
 	function error() {
-		global $connection;
-
-		return h($connection->error);
+		return h(connection()->error);
 	}
 
 	function information_schema() {
-		//
+	}
+
+	function is_view($table_status) {
 	}
 
 	function indexes($table, $connection2 = null) {
@@ -443,29 +411,24 @@ if (isset($_GET["elastic7"])) {
 	}
 
 	function fields($table) {
-		global $connection;
-
 		$mappings = array();
-		$mapping = $connection->rootQuery("_mapping");
 
-		if (!isset($mapping[$table])) {
-			$aliases = $connection->rootQuery('_aliases');
-
-			foreach ($aliases as $index_name => $index) {
-				foreach ($index["aliases"] as $alias_name => $alias) {
-					if ($alias_name == $table) {
-						$table = $index_name;
-						break;
-					}
+		if (min_version(7)) {
+			$result = connection()->query("_mapping");
+			if ($result) {
+				$mappings = $result[connection()->_db]['mappings']['properties'];
+			}
+		} else {
+			$result = connection()->query("$table/_mapping");
+			if ($result) {
+				$mappings = $result[$table]['properties'];
+				if (!$mappings) {
+					$mappings = $result[connection()->_db]['mappings'][$table]['properties'];
 				}
 			}
 		}
 
-		if (!empty($mapping)) {
-			$mappings = $mapping[$table]["mappings"]["properties"];
-		}
-
-		$result = array(
+		$return = array(
 			"_id" => array(
 				"field" => "_id",
 				"full_type" => "text",
@@ -475,12 +438,9 @@ if (isset($_GET["elastic7"])) {
 		);
 
 		foreach ($mappings as $name => $field) {
-			$has_index = !isset($field["index"]) || $field["index"];
+			if (isset($field["index"]) && !$field["index"]) continue;
 
-			// TODO: privileges: where => $has_index
-			// TODO: privileges: sort => $field["type"] != "text"
-
-			$result[$name] = array(
+			$return[$name] = array(
 				"field" => $name,
 				"full_type" => $field["type"],
 				"type" => $field["type"],
@@ -492,9 +452,14 @@ if (isset($_GET["elastic7"])) {
 					"order" => $field["type"] != "text" ?: null
 				),
 			);
+
+			if ($field["properties"]) { // only leaf fields can be edited
+				unset($return[$name]["privileges"]["insert"]);
+				unset($return[$name]["privileges"]["update"]);
+			}
 		}
 
-		return $result;
+		return $return;
 	}
 
 	function foreign_keys($table) {
@@ -530,9 +495,7 @@ if (isset($_GET["elastic7"])) {
 	 * @return mixed
 	 */
 	function create_database($db) {
-		global $connection;
-
-		return $connection->rootQuery(urlencode($db), null, 'PUT');
+		return connection()->rootQuery(urlencode($db), null, 'PUT');
 	}
 
 	/** Remove index
@@ -540,9 +503,7 @@ if (isset($_GET["elastic7"])) {
 	 * @return mixed
 	 */
 	function drop_databases($databases) {
-		global $connection;
-
-		return $connection->rootQuery(urlencode(implode(',', $databases)), null, 'DELETE');
+		return connection()->rootQuery(urlencode(implode(',', $databases)), null, 'DELETE');
 	}
 
 	/** Alter type
@@ -550,8 +511,6 @@ if (isset($_GET["elastic7"])) {
 	 * @return mixed
 	 */
 	function alter_table($table, $name, $fields, $foreign, $comment, $engine, $collation, $auto_increment, $partitioning) {
-		global $connection;
-
 		$properties = array();
 		foreach ($fields as $f) {
 			$field_name = trim($f[1][0]);
@@ -564,8 +523,7 @@ if (isset($_GET["elastic7"])) {
 		if (!empty($properties)) {
 			$properties = array('properties' => $properties);
 		}
-
-		return $connection->query("_mapping/{$name}", $properties, 'PUT');
+		return connection()->query("_mapping/{$name}", $properties, 'PUT');
 	}
 
 	/** Drop types
@@ -573,20 +531,16 @@ if (isset($_GET["elastic7"])) {
 	 * @return bool
 	 */
 	function drop_tables($tables) {
-		global $connection;
-
 		$return = true;
 		foreach ($tables as $table) { //! convert to bulk api
-			$return = $return && $connection->query(urlencode($table), null, 'DELETE');
+			$return = $return && connection()->query(urlencode($table), null, 'DELETE');
 		}
 
 		return $return;
 	}
 
 	function last_id() {
-		global $connection;
-
-		return $connection->last_id;
+		return connection()->last_id;
 	}
 
 	function driver_config() {
