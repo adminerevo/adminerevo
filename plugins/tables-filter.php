@@ -54,16 +54,27 @@ function tablesFilterInput() {
 }
 
 sessionStorage && document.addEventListener('DOMContentLoaded', function () {
-	var db = qs('#dbs').querySelector('select');
-	db = db.options[db.selectedIndex].text;
-	if (db == sessionStorage.getItem('adminer_tables_filter_db') && sessionStorage.getItem('adminer_tables_filter')){
-		qs('#filter-field').value = sessionStorage.getItem('adminer_tables_filter');
-		tablesFilter();
+	if (qs('#dbs') != null) {
+		var db = qs('#dbs').querySelector('select');
+		db = db.options[db.selectedIndex].text;
+		if (db == sessionStorage.getItem('adminer_tables_filter_db') && sessionStorage.getItem('adminer_tables_filter')){
+			qs('#filter-field').value = sessionStorage.getItem('adminer_tables_filter');
+			tablesFilter();
+		}
+		sessionStorage.setItem('adminer_tables_filter_db', db);
 	}
-	sessionStorage.setItem('adminer_tables_filter_db', db);
 });
 </script>
-<p class="jsonly"><input id="filter-field" autocomplete="off"><?php echo script("qs('#filter-field').oninput = tablesFilterInput;"); ?>
+
+<fieldset style="margin-left: .8em;">
+	<legend><?php echo lang('Filter tables'); ?></legend>
+	<div>
+		<input type="search" id="filter-field" autocomplete="off"><?php echo script("qs('#filter-field').oninput = tablesFilterInput;"); ?>
+		<input type="button" id="filter-field-reset" value="<?php echo lang('Clear'); ?>">
+		<?php echo script("qs('#filter-field-reset').onclick = function() { qs('#filter-field').value = ''; qs('#filter-field').dispatchEvent(new Event('input')); }"); ?>
+	</div>
+</fieldset>
+
 <?php
 	}
 }
