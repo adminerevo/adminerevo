@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+  <version>0.3.1</version>
+  <description>Generate usage documentation (documents only it's public API) for a small library in Markdown format so it can be published in GitHub.</description>
+  <transformations>
+    <transformation writer="twig" source="templates/public-onefile/index.md.twig" artifact="README.md" />
+  </transformations>
+  <parameters>
+    <parameter key="twig-debug">true</parameter>
+  </parameters>
+</template>

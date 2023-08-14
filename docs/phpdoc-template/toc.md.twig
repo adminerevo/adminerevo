@@ -1,0 +1,14 @@
+## Table of Contents
+
+| Method | Description |
+|--------|-------------|
+{% for class in project.indexes.classes|sort_asc %}
+{% if not class.abstract %}
+| [**{{ class.name }}**](#{{ class.name }}) | {{ class.summary|raw|replace({'\n': '', '\r': '', '|': '\\|'}) }} |
+{% for method in class.methods %}
+{% if method.visibility == 'public' %}
+| [{{ class.name }}::{{ method.name }}](#{{ class.name }}{{ method.name }}) | {{ method.summary|raw|replace({'\n': '', '\r': '', '|': '\\|'}) }} {{ method.line }} {{ dump(method.getPath) }}  |
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}
