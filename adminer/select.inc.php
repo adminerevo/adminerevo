@@ -315,7 +315,7 @@ if (!$columns && support("table")) {
 			echo "<thead><tr>" . (!$group && $select
 				? ""
 				: "<td><input type='checkbox' id='all-page' class='jsonly'>" . script("qs('#all-page').onclick = partial(formCheck, /check/);", "")
-					. " <a href='" . h($_GET["modify"] ? remove_from_uri("modify") : $_SERVER["REQUEST_URI"] . "&modify=1") . "' title='" . lang('Modify') . "'>" . lang('Modify') . "</a>");
+					. " <a href='" . h($_GET["modify"] ? remove_from_uri("modify") : $_SERVER["REQUEST_URI"] . "&modify=1") . "' title='" . lang('Modify') . "' class='edit-all'>" . lang('Modify') . "</a>");
 			$names = array();
 			$functions = array();
 			reset($select);
