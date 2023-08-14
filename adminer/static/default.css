@@ -16,7 +16,7 @@ td, th { border: 1px solid #999; padding: .2em .3em; }
 th { background: #eee; text-align: left; }
 thead th { text-align: center; padding: .2em .5em; }
 thead td, thead th { background: #ddf; } /* position: sticky; causes Firefox to lose borders */
-fieldset { display: inline; vertical-align: top; padding: .5em .8em; margin: .8em .5em 0 0; border: 1px solid #999; }
+fieldset { display: inline; vertical-align: top; padding: .5em .8em; margin: .8em .5em 0 0; border: 1px solid #999; border-radius: 5px; }
 p { margin: .8em 20px 0 0; }
 img { vertical-align: middle; border: 0; }
 td img { max-width: 200px; max-height: 200px; }
