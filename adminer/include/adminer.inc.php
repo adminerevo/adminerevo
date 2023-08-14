@@ -236,7 +236,7 @@ class Adminer {
 		if (!$failed && ($warnings = $driver->warnings())) {
 			$id = "warnings";
 			$return = ", <a href='#$id'>" . lang('Warnings') . "</a>" . script("qsl('a').onclick = partial(toggle, '$id');", "")
-				. "$return<div id='$id' class='hidden'>\n$warnings</div>\n"
+				. "<div id='$id' class='hidden'>\n$warnings</div>\n"
 			;
 		}
 		$links = [
