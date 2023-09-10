@@ -868,7 +868,13 @@ function setupCopyToClipboard(document) {
 	var node = document.querySelector("a.copy-to-clipboard");
 	if (node) {
 		node.addEventListener("click", function() {
-			copyToClipboard(document.querySelector("code.copy-to-clipboard"));
+			var nodeSql = document.querySelector("code.copy-to-clipboard");
+			if (nodeSql == null || nodeSql == undefined) {
+				nodeSql = document.querySelector("textarea.sqlarea");
+			}
+			if (nodeSql != null && nodeSql != undefined) {
+				copyToClipboard(nodeSql);
+			}
 		});
 	}
 }
@@ -877,12 +883,23 @@ function setupCopyToClipboard(document) {
  * @param HTMLElement
  */
 function copyToClipboard(el) {
-	var range = document.createRange();
-	range.selectNode(el);
-	window.getSelection().removeAllRanges();
-	window.getSelection().addRange(range);
-	document.execCommand("copy");
-	window.getSelection().removeAllRanges();
+	var nodeName = el.nodeName.toLowerCase();
+	if (nodeName == 'code') {
+		var range = document.createRange();
+		range.selectNode(el);
+		window.getSelection().removeAllRanges();
+		window.getSelection().addRange(range);
+		document.execCommand("copy");
+		window.getSelection().removeAllRanges();
+	} else if (nodeName == 'textarea') {
+		el.select();
+		if (document.getSelection().toString().length > 1024 * 1024) {
+			alert('Too large for clipboard');
+		} else {
+			document.execCommand("copy");
+			document.getSelection().removeAllRanges();
+		}
+	}
 }
 
 /** Add event listener
