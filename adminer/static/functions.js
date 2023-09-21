@@ -873,6 +873,9 @@ function setupCopyToClipboard(document) {
 				nodeSql = document.querySelector("textarea.sqlarea");
 			}
 			if (nodeSql != null && nodeSql != undefined) {
+				if (node.classList.contains('expand')) {
+					document.getElementById(node.getAttribute('data-expand-id')).classList.remove("hidden");
+				}
 				copyToClipboard(nodeSql);
 			}
 		});
@@ -883,6 +886,7 @@ function setupCopyToClipboard(document) {
  * @param HTMLElement
  */
 function copyToClipboard(el) {
+
 	var nodeName = el.nodeName.toLowerCase();
 	if (nodeName == 'code') {
 		var range = document.createRange();
