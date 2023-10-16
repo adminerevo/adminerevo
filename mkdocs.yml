@@ -1,3 +1,5 @@
+# ~/Downloads/phpDocumentor.phar --template=docs/phpdoc-template/ -f adminer/include/adminer.inc.php -f adminer/include/functions.inc.php -f adminer/include/lang.inc.php -f adminer/include/driver.inc.php -f adminer/include/editing.inc.php -f adminer/drivers/mysql.inc.php
+
 site_name: AdminerEvo
 site_description: AdminerEvo documentation
 docs_dir: docs/
@@ -12,6 +14,7 @@ theme:
     - toc.integrate
     - content.code.annotate
   favicon: assets/favicon.png
+  font: false
 extra_css:
   - assets/local.css
 markdown_extensions:
