@@ -32,12 +32,22 @@ class AdminerFileUpload {
 		if (preg_match('~(.*)_path$~', $field["field"], $regs)) {
 			$table = ($_GET["edit"] != "" ? $_GET["edit"] : $_GET["select"]);
 			$name = "fields-$field[field]";
-			if ($_FILES[$name]["error"] || !preg_match("~(\\.($this->extensions))?\$~", $_FILES[$name]["name"], $regs2)) {
+			if ($_FILES["fields"]["error"][$field["field"]] || !preg_match("~(\\.($this->extensions))?\$~", $_FILES["fields"]["name"][$field["field"]], $regs2)) {
 				return false;
 			}
-			//! unlink old
-			$filename = uniqid() . $regs2[0];
-			if (!move_uploaded_file($_FILES[$name]["tmp_name"], "$this->uploadPath$table/$regs[1]-$filename")) {
+			// create sub-directory if needed
+			if (file_exists(__DIR__ . '/' . $this->uploadPath . '/' . $table) === false) {
+				mkdir(__DIR__ . '/' . $this->uploadPath . '/' . $table);
+			}
+			// generate filename
+			$filename = realpath(tempnam(__DIR__ . '/' . $this->uploadPath . '/' . $table, ''));
+			
+			// prevent the final to be anywhere else then under the upload directory
+			if (strpos($filename, realpath(__DIR__ . '/' . $this->uploadPath)) !== 0) {
+				return false;
+			}
+			// move file to its final location
+			if (!move_uploaded_file($_FILES["fields"]["tmp_name"][$field["field"]], $filename)) {
 				return false;
 			}
 			return q($filename);
