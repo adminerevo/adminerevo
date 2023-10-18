@@ -40,7 +40,7 @@ class AdminerFileUpload {
 				mkdir(__DIR__ . '/' . $this->uploadPath . '/' . $table);
 			}
 			// generate filename
-			$filename = realpath(tempnam(__DIR__ . '/' . $this->uploadPath . '/' . $table, ''));
+			$filename = realpath(tempnam(__DIR__ . '/' . $this->uploadPath . '/' . $table, '.htfile'));
 			
 			// prevent the final to be anywhere else then under the upload directory
 			if (strpos($filename, realpath(__DIR__ . '/' . $this->uploadPath)) !== 0) {
