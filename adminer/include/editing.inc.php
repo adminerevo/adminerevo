@@ -208,6 +208,9 @@ function process_length($length) {
 */
 function process_type($field, $collate = "COLLATE") {
 	global $unsigned;
+	if (DRIVER === 'server' && ($field['unsigned'] === 'unsigned' || stripos( (string) $field['type'],'int') !== false) && min_version(8)) {
+		$field["length"] = '';
+	}
 	return " $field[type]"
 		. process_length($field["length"])
 		. (preg_match(number_type(), $field["type"]) && in_array($field["unsigned"], $unsigned) ? " $field[unsigned]" : "")
