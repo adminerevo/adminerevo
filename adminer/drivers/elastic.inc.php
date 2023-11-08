@@ -23,7 +23,7 @@ if (isset($_GET["elastic"])) {
 					'ignore_errors' => 1, // available since PHP 5.2.10
 				))));
 				if (!$file) {
-					$this->error = $php_errormsg;
+					$this->error = error_get_last()['message'];
 					return $file;
 				}
 				if (!preg_match('~^HTTP/[0-9.]+ 2~i', $http_response_header[0])) {
