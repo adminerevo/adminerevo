@@ -623,8 +623,10 @@ qsl('div').onclick = whisperClick;", "")
 			if (isset($row["Engine"]) && $name != "") { // ignore views and tables without name
 				echo "<a href='" . h(ME) . 'select=' . urlencode($row["Name"]) . "'"
 					. bold($_GET["select"] == $row["Name"] || $_GET["edit"] == $row["Name"], "select")
-					. " title='" . lang('Select data') . "'>$name</a>\n"
-				;
+					. " title='" . lang('Select data') . "'>$name</a>\n";
+				echo "<a href='" . h(ME) . 'select=' . urlencode($row["Name"]) . "'"
+					. bold($_GET["select"] == $row["Name"] || $_GET["edit"] == $row["Name"], "")
+					. " title='" . lang('Select data') . "'>$name</a>\n";
 			}
 		}
 		echo "</ul>\n";
