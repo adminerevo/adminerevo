@@ -300,7 +300,7 @@ function edit_fields($fields, $collations, $type = "TABLE", $foreign_keys = arra
 	foreach ($fields as $i => $field) {
 		$i++;
 		$orig = $field[($_POST ? "orig" : "field")];
-		$display = (isset($_POST["add"][$i-1]) || (isset($field["field"]) && !$_POST["drop_col"][$i])) && (support("drop_col") || $orig == "");
+		$display = (isset($_POST["add"][$i-1]) || (isset($field["field"]) && isset($_POST["drop_col"][$i]) === false)) && (support("drop_col") || $orig == "");
 		?>
 <tr<?php echo ($display ? "" : " style='display: none;'"); ?>>
 <?php echo ($type == "PROCEDURE" ? "<td>" . html_select("fields[$i][inout]", explode("|", $inout), $field["inout"]) : ""); ?>

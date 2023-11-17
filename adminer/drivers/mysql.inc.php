@@ -1092,13 +1092,13 @@ if (!defined("DRIVER")) {
 	* @return string
 	*/
 	function unconvert_field($field, $return) {
-		if (preg_match("~binary~", $field["type"])) {
+		if (preg_match("~binary~", $field["type"] ?? null)) {
 			$return = "UNHEX($return)";
 		}
-		if ($field["type"] == "bit") {
+		if (isset($field["type"]) && $field["type"] == "bit") {
 			$return = "CONV($return, 2, 10) + 0";
 		}
-		if (preg_match("~geometry|point|linestring|polygon~", $field["type"])) {
+		if (preg_match("~geometry|point|linestring|polygon~", $field["type"] ?? null)) {
 			$prefix = (min_version(8) ? "ST_" : "");
 			$return = $prefix . "GeomFromText($return, $prefix" . "SRID($field[field]))";
 		}
