@@ -105,7 +105,7 @@ a.copy-to-clipboard.icon { font-size: 0; padding: 12px 8px 5px 8px; margin-left:
 .rtl input.wayoff { left: auto; right: -1000px; }
 .rtl #lang, .rtl #menu { left: auto; right: 0; }
 
-@media all and (max-device-width: 880px) {
+@media all and (max-width: 880px) {
 	.pages { left: auto; }
 	#menu { position: static; width: auto; }
 	#content { margin-left: 10px; }
