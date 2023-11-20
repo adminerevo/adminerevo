@@ -33,6 +33,7 @@ input[type='submit'] { padding-left: 10px; padding-right: 10px; }
 select { border-radius: 5px; padding: 2px; vertical-align: middle;; }
 fieldset label input[type='checkbox'] { margin-bottom: 6px; }
 fieldset a { line-height: 20px; }
+#fieldset-select div:last-child > button, #fieldset-search div:last-child > button, #fieldset-sort div:last-child > button { display: none; }
 span.separator { margin-left: 5px; margin-right: 5px; }
 .block { display: block; }
 .version { color: #777; font-size: 50%; }

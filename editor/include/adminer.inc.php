@@ -259,15 +259,20 @@ ORDER BY ORDINAL_POSITION", null, "") as $row) { //! requires MySQL 5
 			if (($val["col"] == "" || $columns[$val["col"]]) && "$val[col]$val[val]" != "") {
 				echo "<div><select name='where[$i][col]'><option value=''>(" . lang('anywhere') . ")" . optionlist($columns, $val["col"], true) . "</select>";
 				echo html_select("where[$i][op]", array(-1 => "") + $this->operators, $val["op"]);
-				echo "<input type='search' name='where[$i][val]' value='" . h($val["val"]) . "'>" . script("mixin(qsl('input'), {onkeydown: selectSearchKeydown, onsearch: selectSearchSearch});", "") . "</div>\n";
+				echo "<input type='search' name='where[$i][val]' value='" . h($val["val"]) . "'>" . script("mixin(qsl('input'), {onkeydown: selectSearchKeydown, onsearch: selectSearchSearch});", "");
+				echo '<button type="button" class="jsonly" title="', h(lang('remove')), '">x</button>' . script('qsl("button").onclick = selectRemoveRow;', "");
+				echo "</div>\n";
 				$i++;
 			}
 		}
 		echo "<div><select name='where[$i][col]'><option value=''>(" . lang('anywhere') . ")" . optionlist($columns, null, true) . "</select>";
 		echo script("qsl('select').onchange = selectAddRow;", "");
 		echo html_select("where[$i][op]", array(-1 => "") + $this->operators);
-		echo "<input type='search' name='where[$i][val]'></div>";
+		echo "<input type='search' name='where[$i][val]'>";
 		echo script("mixin(qsl('input'), {onchange: function () { this.parentNode.firstChild.onchange(); }, onsearch: selectSearchSearch});");
+		echo '<button type="button" class="jsonly" title="', h(lang('remove')), '">x</button>';
+		echo script('qsl("button").onclick = selectRemoveRow;', "");
+		echo "</div>";
 		echo "</div></fieldset>\n";
 	}
 
