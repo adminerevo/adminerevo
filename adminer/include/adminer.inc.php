@@ -372,7 +372,7 @@ class Adminer {
 				. on_help("getTarget(event).value && getTarget(event).value.replace(/ |\$/, '(') + ')'", 1)
 				. script("qsl('select').onchange = function () { helpClose();" . ($key !== "" ? "" : " qsl('select, input', this.parentNode).onchange();") . " };", "")
 				. "($column)" : $column)
-				. ' <button type="button" class="jsonly" title="', h(lang('remove')), '">x</button>'
+				. ' <button type="button" class="jsonly" title="', h(lang('Remove')), '">x</button>'
 				. script('qsl("button").onclick = selectRemoveRow;', "")
 				. "</div>\n";
 			$i++;
@@ -410,7 +410,7 @@ class Adminer {
 				echo html_select("where[$i][op]", $this->operators, $val["op"], $change_next);
 				echo "<input type='search' name='where[$i][val]' value='" . h($val["val"]) . "'>";
 				echo script("mixin(qsl('input'), {oninput: function () { $change_next }, onkeydown: selectSearchKeydown, onsearch: selectSearchSearch});", "");
-				echo '<button type="button" class="jsonly" title="', h(lang('remove')), '">x</button>';
+				echo '<button type="button" class="jsonly" title="', h(lang('Remove')), '">x</button>';
 				echo script('qsl("button").onclick = selectRemoveRow;', "");
 				echo "</div>\n";
 			}
@@ -431,7 +431,7 @@ class Adminer {
 			if ($val != "") {
 				echo "<div>" . select_input(" name='order[$i]'", $columns, $val, "selectFieldChange");
 				echo checkbox("desc[$i]", 1, isset($_GET["desc"][$key]), lang('descending'));
-				echo ' <button type="button" class="jsonly" title="', h(lang('remove')), '">x</button>';
+				echo ' <button type="button" class="jsonly" title="', h(lang('Remove')), '">x</button>';
 				echo script('qsl("button").onclick = selectRemoveRow;', "");
 				echo "</div>\n";
 				$i++;
@@ -439,7 +439,7 @@ class Adminer {
 		}
 		echo "<div>" . select_input(" name='order[$i]'", $columns, "", "selectAddRow");
 		echo checkbox("desc[$i]", 1, false, lang('descending'));
-		echo ' <button type="button" class="jsonly" title="', h(lang('remove')), '">x</button>';
+		echo ' <button type="button" class="jsonly" title="', h(lang('Remove')), '">x</button>';
 		echo script('qsl("button").onclick = selectRemoveRow;', "");
 		echo "</div>\n";
 		echo "</div></fieldset>\n";
