@@ -394,7 +394,26 @@ function selectAddRow() {
 			inputs[i].value = '';
 		}
 	}
+	var buttons = qsa('button', row);
+	for (var i=0; i < buttons.length; i++) {
+		buttons[i].onclick = selectRemoveRow;
+	}
 	field.parentNode.parentNode.appendChild(row);
+}
+
+/** Remove a row in select fieldset
+* @this HTMLButtonElement
+*/
+function selectRemoveRow() {
+	var button = this;
+	var row = button.parentNode;
+	var nextRow = row;
+	while (nextRow = nextRow.nextSibling) {
+		if (nextRow.tagName === row.tagName) {
+			row.parentNode.removeChild(row);
+			return;
+		}
+	}
 }
 
 /** Prevent onsearch handler on Enter
