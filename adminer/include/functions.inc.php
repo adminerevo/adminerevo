@@ -1031,7 +1031,7 @@ function input($field, $value, $function) {
 function process_input($field) {
 	global $adminer, $driver;
 	$idf = bracket_escape($field["field"]);
-	$function = $_POST["function"][$idf];
+	$function = $_POST["function"][$idf] ?? null;
 	$value = $_POST["fields"][$idf];
 	if ($field["type"] == "enum") {
 		if ($value == -1) {
@@ -1508,8 +1508,12 @@ function edit_form($table, $fields, $row, $update) {
 			if (!$_POST["save"] && is_string($value)) {
 				$value = $adminer->editVal($value, $field);
 			}
+			$fname = null;
+			if (isset($_POST["function"][$name])) {
+				$fname = (string)$_POST["function"][$name];
+			}
 			$function = ($_POST["save"]
-				? (string) $_POST["function"][$name]
+				? $fname
 				: ($update && preg_match('~^CURRENT_TIMESTAMP~i', $field["on_update"])
 					? "now"
 					: ($value === false ? null : ($value !== null ? '' : 'NULL'))
