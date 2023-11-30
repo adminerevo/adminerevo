@@ -24,13 +24,16 @@ h2 {
 	padding: 0;
 	background: none;
 	border: 0;
-	font-family: "Segoe UI Light", "Segoe UI", Arial, sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 	font-size: 32px;
 	font-weight: normal;
 	color: #34567c;
 	border-bottom: 1px solid #ebebeb;
 	padding-bottom: 6px;
 	margin-bottom: 40px;
+}
+p {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
 .rtl h2 {
@@ -44,6 +47,7 @@ h3 {
 	border-bottom: 1px solid #ebebeb;
 	padding: 0;
 	padding-bottom: 6px;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
 p {
@@ -124,6 +128,11 @@ h3 + table {
 	border: 1px solid #bbb;
 	margin-bottom: 15px;
 }
+#table thead tr td a.edit-all, #fieldset-history a.edit-all,
+#table tbody tr td a.edit, #fieldset-history a.edit {
+    background-image: none;
+    font-size: unset;
+}
 
 table.checkable tbody tr:hover td,
 table.checkable tbody tr:hover th {
@@ -173,7 +182,7 @@ legend {
 	padding: 6px 15px;
 	margin: 0 0 0 -15px;
 	background: #f5f5f5;
-	font-family: "Segoe UI Semibold", "Segoe UI", Arial, sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
 legend a,
@@ -183,7 +192,8 @@ legend a:link:hover {
 }
 
 code {
-	background: none;
+	/* background: none; */
+    padding: 3px 6px;
 }
 
 p code,
@@ -249,6 +259,7 @@ p code + a:visited:hover {
 	padding-top: 9px;
 	text-transform: lowercase;
 	margin: 25px 0 10px 16px;
+    border-top: none;
 }
 
 #menu h1 a {
@@ -270,11 +281,10 @@ p code + a:visited:hover {
 
 #menu #dbs {
 	background: #fff;
-	padding: 0 15px 15px;
 	border: 1px solid #dae8fa;
 	border-bottom: 0;
 	box-sizing: border-box;
-	color: #fff;
+	color: #000;
 }
 
 #menu #dbs select {
@@ -284,7 +294,6 @@ p code + a:visited:hover {
 }
 
 #menu p.links {
-	margin: 0 0 15px;
 	border: 1px solid #dae8fa;
 	border-top: 0;
 	text-align: center;
@@ -311,13 +320,12 @@ p code + a:visited:hover {
 }
 
 #content p.links {
-	margin: -10px 0 15px;
+	margin: 0 0 15px;
 }
 
 #content p.links a {
 	padding: 8px;
 	margin: 0;
-	display: table-cell;
 	border: 1px solid #fff;
 }
 
@@ -344,15 +352,25 @@ p code + a:visited:hover {
 	overflow: hidden !important;
 	overflow-y: auto !important;
 }
-
+#tables li {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+}
+#tables li a.select {
+    /* font-size: unset; */
+    /* background-image: none; */
+    padding: 0 10px;
+    margin: 8px;
+    background-image: url('data:image/svg+xml;utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="currentColor" d="m17.545 15.467l-3.779-3.779a6.15 6.15 0 0 0 .898-3.21c0-3.417-2.961-6.377-6.378-6.377A6.185 6.185 0 0 0 2.1 8.287c0 3.416 2.961 6.377 6.377 6.377a6.15 6.15 0 0 0 3.115-.844l3.799 3.801a.953.953 0 0 0 1.346 0l.943-.943c.371-.371.236-.84-.135-1.211zM4.004 8.287a4.282 4.282 0 0 1 4.282-4.283c2.366 0 4.474 2.107 4.474 4.474a4.284 4.284 0 0 1-4.283 4.283c-2.366-.001-4.473-2.109-4.473-4.474z"/></svg>');
+}
 .rtl #tables {
 	overflow: hidden !important;
 	overflow-y: auto !important;
 }
 
 #tables a {
-	float: right;
-	padding: 6px 15px;
+	padding: 6px 0;
 }
 
 .rtl #tables a {
@@ -375,7 +393,6 @@ p code + a:visited:hover {
 #tables a:hover + a,
 #tables a.active,
 #tables a.active + a {
-	background: #fff;
 	color: #2e84e4;
 }
 
@@ -471,7 +488,8 @@ table:not(#table) input[type="password"],
 table:not(#table) input[type="tel"],
 table:not(#table) input[type="url"],
 table:not(#table) input[type="text"],
-table:not(#table) input[type="search"] {
+table:not(#table) input[type="search"],
+table:not(#table) textarea {
 	min-width: 280px;
 }
 
@@ -543,6 +561,10 @@ label {
 	background: none;
 }
 
+#form input[type=text],
+#form input[type=number] {
+	min-width: 70px;
+}
 #form > p {
 	margin-bottom: 15px;
 }
