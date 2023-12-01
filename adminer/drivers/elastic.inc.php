@@ -227,6 +227,9 @@ if (isset($_GET["elastic"])) {
 		global $adminer;
 		$connection = new Min_DB;
 		list($server, $username, $password) = $adminer->credentials();
+		if (strpos($server, '/') !== false || strpos($server, ':') !== false) {
+			return lang('Only hostname or IP address');
+		}
 		if ($password != "" && $connection->connect($server, $username, "")) {
 			return lang('Database does not support password.');
 		}
