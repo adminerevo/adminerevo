@@ -340,6 +340,12 @@ function number_type() {
 	return '';
 }
 
+function ini_bool($ini) {
+	$val = ini_get($ini);
+	return (preg_match('~^(on|true|yes)$~i', $val) || (int) $val); // boolean values set by php_value are strings
+}
+
+
 $project = "adminer";
 if ($_SERVER["argv"][1] == "editor") {
 	$project = "editor";
