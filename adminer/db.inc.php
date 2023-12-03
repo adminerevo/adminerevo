@@ -1,5 +1,13 @@
 <?php
-$tables_views = array_merge((array) $_POST["tables"], (array) $_POST["views"]);
+if (isset($_POST["tables"]) && isset($_POST["views"])) {
+	$tables_views = array_merge((array) $_POST["tables"], (array) $_POST["views"]);
+} elseif (isset($_POST["tables"])) {
+	$tables_views = (array)$_POST["tables"];
+} elseif (isset($_POST["views"])) {
+	$tables_views = (array)$_POST["views"];
+} else {
+	$tables_views = [];
+}
 
 if ($tables_views && !$error && !$_POST["search"]) {
 	$result = true;
@@ -44,10 +52,10 @@ if ($tables_views && !$error && !$_POST["search"]) {
 	queries_redirect(substr(ME, 0, -1), $message, $result);
 }
 
-page_header(($_GET["ns"] == "" ? lang('Database') . ": " . h(DB) : lang('Schema') . ": " . h($_GET["ns"])), $error, true);
+page_header((isset($_GET["ns"]) === false || $_GET["ns"] == "" ? lang('Database') . ": " . h(DB) : lang('Schema') . ": " . h($_GET["ns"])), $error, true);
 
 if ($adminer->homepage()) {
-	if ($_GET["ns"] !== "") {
+	if (isset($_GET["ns"]) === false || $_GET["ns"] !== "") {
 		echo "<h3 id='tables-views'>" . lang('Tables and views') . "</h3>\n";
 		$tables_list = tables_list();
 		if (!$tables_list) {
@@ -56,7 +64,7 @@ if ($adminer->homepage()) {
 			echo "<form action='' method='post'>\n";
 			if (support("table")) {
 				echo "<fieldset><legend>" . lang('Search data in tables') . " <span id='selected2'></span></legend><div>";
-				echo "<input type='search' name='query' value='" . h($_POST["query"]) . "'>";
+				echo "<input type='search' name='query' value='" . h((isset($_POST["query"]) && $_POST["query"] ? $_POST["query"] : "")) . "'>";
 				echo script("qsl('input').onkeydown = partialArg(bodyKeydown, 'search');", "");
 				echo " <input type='submit' name='search' value='" . lang('Search') . "'>\n";
 				if ($adminer->operator_regexp !== null) {
@@ -64,7 +72,7 @@ if ($adminer->homepage()) {
 					echo doc_link(array('sql' => 'regexp.html', 'pgsql' => 'functions-matching.html#FUNCTIONS-POSIX-REGEXP')) . "</p>\n";
 				}
 				echo "</div></fieldset>\n";
-				if ($_POST["search"] && $_POST["query"] != "") {
+				if (isset($_POST["search"]) && $_POST["query"] != "") {
 					$_GET["where"][0]["op"] = $adminer->operator_regexp === null || empty($_POST['regexp']) ? "LIKE %%" : $adminer->operator_regexp;
 					search_tables();
 				}
@@ -143,7 +151,7 @@ if ($adminer->homepage()) {
 					echo "<p>" . lang('Move to other database') . ": ";
 					echo ($databases ? html_select("target", $databases, $db) : '<input name="target" value="' . h($db) . '" autocapitalize="off">');
 					echo " <input type='submit' name='move' value='" . lang('Move') . "'>";
-					echo (support("copy") ? " <input type='submit' name='copy' value='" . lang('Copy') . "'> " . checkbox("overwrite", 1, $_POST["overwrite"], lang('overwrite')) : "");
+					echo (support("copy") ? " <input type='submit' name='copy' value='" . lang('Copy') . "'> " . checkbox("overwrite", 1, isset($_POST["overwrite"]), lang('overwrite')) : "");
 					echo "\n";
 				}
 				echo "<input type='hidden' name='all' value=''>"; // used by trCheck()

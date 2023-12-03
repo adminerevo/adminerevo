@@ -939,13 +939,13 @@ class Adminer {
 	*/
 	function homepage() {
 		$links = [];
-		if ($_GET["ns"] == "" && support("database")) {
+		if (isset($_GET["ns"]) && $_GET["ns"] == "" && support("database")) {
 			$links[] = '<a href="' . h(ME) . 'database=">' . lang('Alter database') . '</a>';
 		}
 		if (support("scheme")) {
 			$links[] = "<a href='" . h(ME) . "scheme='>" . ($_GET["ns"] != "" ? lang('Alter schema') : lang('Create schema')) . "</a>";
 		}
-		if ($_GET["ns"] !== "") {
+		if (isset($_GET["ns"]) && $_GET["ns"] !== "") {
 			$links[] = '<a href="' . h(ME) . 'schema=">' . lang('Database schema') . '</a>';
 		}
 		if (support("privileges")) {
@@ -987,7 +987,7 @@ class Adminer {
 			}
 		} else {
 			$tables = array();
-			if ($_GET["ns"] !== "" && !$missing && DB != "") {
+			if (isset($_GET["ns"]) === false || $_GET["ns"] !== "" && !$missing && DB != "") {
 				$connection->select_db(DB);
 				$tables = table_status('', true);
 			}
@@ -1024,13 +1024,13 @@ bodyLoad('<?php echo (is_object($connection) ? preg_replace('~^(\d\.?\d).*~s', '
 					$links[] = "<a href='" . h(ME) . "import='" . bold(isset($_GET["import"])) . ">" . lang('Import') . "</a>";
 				}
 				if (support("dump")) {
-					$links[] = "<a href='" . h(ME) . "dump=" . urlencode(isset($_GET["table"]) ? $_GET["table"] : $_GET["select"]) . "' id='dump'" . bold(isset($_GET["dump"])) . ">" . lang('Export') . "</a>";
+					$links[] = "<a href='" . h(ME) . "dump=" . urlencode(isset($_GET["table"]) ? $_GET["table"] : (isset($_GET["select"]) && $_GET["select"] ? $_GET["select"] : "" )) . "' id='dump'" . bold(isset($_GET["dump"])) . ">" . lang('Export') . "</a>";
 				}
 			}
 			echo generate_linksbar($links);
 
-			if ($_GET["ns"] !== "" && !$missing && DB != "") {
-				echo generate_linksbar(['<a href="' . h(ME) . 'create="' . bold($_GET["create"] === "") . ">" . lang('Create table') . "</a>"]);
+			if (isset($_GET["ns"]) === false || $_GET["ns"] !== "" && !$missing && DB != "") {
+				echo generate_linksbar(['<a href="' . h(ME) . 'create="' . bold(isset($_GET["create"]) && $_GET["create"] === "") . ">" . lang('Create table') . "</a>"]);
 				if (!$tables) {
 					echo "<p class='message'>" . lang('No tables.') . "\n";
 				} else {
@@ -1090,13 +1090,20 @@ bodyLoad('<?php echo (is_object($connection) ? preg_replace('~^(\d\.?\d).*~s', '
 		foreach ($tables as $table => $status) {
 			$name = $this->tableName($status);
 			if ($name != "") {
+				$array = [];
+				if (isset($_GET["table"])) $array[] = $_GET["table"];
+				if (isset($_GET["create"])) $array[] = $_GET["create"];
+				if (isset($_GET["indexes"])) $array[] = $_GET["indexes"];
+				if (isset($_GET["foreign"])) $array[] = $_GET["foreign"];
+				if (isset($_GET["trigger"])) $array[] = $_GET["trigger"];
+				if (isset($_GET["select"])) $array[] = $_GET["select"];
 				echo '<li><a href="' . h(ME) . 'select=' . urlencode($table) . '"'
-					. bold($_GET["select"] == $table || $_GET["edit"] == $table, "select")
+					. bold(isset($_GET["select"]) && $_GET["select"] == $table || isset($_GET["edit"]) && $_GET["edit"] == $table, "select")
 					. " title='" . lang('Select data') . "'>" . lang('select') . "</a> "
 				;
 				echo (support("table") || support("indexes")
 					? '<a href="' . h(ME) . 'table=' . urlencode($table) . '"'
-						. bold(in_array($table, array($_GET["table"], $_GET["create"], $_GET["indexes"], $_GET["foreign"], $_GET["trigger"], $_GET["select"])), (is_view($status) ? "view" : "structure"))
+						. bold(in_array($table, $array), (is_view($status) ? "view" : "structure"))
 						. " title='" . lang('Show structure') . "'>$name</a>"
 					: "<span>$name</span>"
 				) . "\n";

@@ -40,12 +40,17 @@ function add_invalid_login() {
 
 function check_invalid_login() {
 	global $adminer;
-	$invalids = unserialize(@file_get_contents(get_temp_dir() . "/adminer.invalid")); // @ - may not exist
+	$filename = get_temp_dir() . "/adminer.invalid";
+	if (file_exists($filename)) {
+		$invalids = unserialize(file_get_contents(get_temp_dir() . "/adminer.invalid"));
+	} else {
+		$invalids = [];
+	}
 	$invalid = ($invalids ? $invalids[$adminer->bruteForceKey()] : array());
 	if ($invalid === null) {
 		return;
 	}
-	$next_attempt = ($invalid[1] > 29 ? $invalid[0] - time() : 0); // allow 30 invalid attempts
+	$next_attempt = (isset($invalid[1]) && $invalid[1] > 29 ? $invalid[0] - time() : 0); // allow 30 invalid attempts
 	if ($next_attempt > 0) { //! do the same with permanent login
 		auth_error(lang('Too many unsuccessful logins, try again in %d minute(s).', ceil($next_attempt / 60)));
 	}
@@ -158,7 +163,12 @@ if (isset($_GET["username"]) && !class_exists("Min_DB")) {
 stop_session(true);
 
 if (isset($_GET["username"]) && is_string(get_password())) {
-	list($host, $port) = explode(":", SERVER, 2);
+	if (strpos(SERVER, ':') !== false) {
+		list($host, $port) = explode(":", SERVER, 2);
+	} else {
+		$host = SERVER;
+		$port = null;
+	}
 	if (preg_match('~^\s*([-+]?\d+)~', $port, $match) && ($match[1] < 1024 || $match[1] > 65535)) { // is_numeric('80#') would still connect to port 80
 		auth_error(lang('Connecting to privileged ports is not allowed.'));
 	}
@@ -173,7 +183,7 @@ if (!is_object($connection) || ($login = $adminer->login($_GET["username"], get_
 	auth_error($error . (preg_match('~^ | $~', get_password()) ? '<br>' . lang('There is a space in the input password which might be the cause.') : ''));
 }
 
-if ($_POST["logout"] && $has_token && !verify_token()) {
+if (isset($_POST["logout"]) && $_POST["logout"] && $has_token && !verify_token()) {
 	page_header(lang('Logout'), lang('Invalid CSRF token. Send the form again.'));
 	page_footer("db");
 	exit;
