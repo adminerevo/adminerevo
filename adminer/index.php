@@ -14,7 +14,7 @@ include "./include/tmpfile.inc.php";
 $enum_length = "'(?:''|[^'\\\\]|\\\\.)*'";
 $inout = "IN|OUT|INOUT";
 
-if (isset($_GET["select"]) && ($_POST["edit"] || $_POST["clone"]) && !$_POST["save"]) {
+if (isset($_GET["select"]) && ((isset($_POST["edit"]) && $_POST["edit"]) || (isset($_POST["clone"]) && $_POST["clone"])) && (isset($_POST["save"]) || !$_POST["save"])) {
 	$_GET["edit"] = $_GET["select"];
 }
 if (isset($_GET["callf"])) {

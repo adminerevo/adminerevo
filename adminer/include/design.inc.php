@@ -80,7 +80,7 @@ var thousandsSeparator = '<?php echo js_escape(lang(',')); ?>';
 				echo '<a href="' . h($link . "&db=" . urlencode(DB) . (support("scheme") ? "&ns=" : "")) . '">' . h(DB) . '</a> &raquo; ';
 			}
 			if (is_array($breadcrumb)) {
-				if ($_GET["ns"] != "") {
+				if (isset($_GET["ns"]) && $_GET["ns"] != "") {
 					echo '<a href="' . h(substr(ME, 0, -1)) . '">' . h($_GET["ns"]) . '</a> &raquo; ';
 				}
 				foreach ($breadcrumb as $key => $val) {

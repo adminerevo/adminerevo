@@ -398,21 +398,23 @@ class Adminer {
 			}
 		}
 		$change_next = "this.parentNode.firstChild.onchange();";
-		foreach (array_merge((array) $_GET["where"], array(array())) as $i => $val) {
-			if (!$val || ("$val[col]$val[val]" != "" && in_array($val["op"], $this->operators))) {
-				echo "<div>" . select_input(
-					" name='where[$i][col]'",
-					$columns,
-					$val["col"],
-					($val ? "selectFieldChange" : "selectAddRow"),
-					"(" . lang('anywhere') . ")"
-				);
-				echo html_select("where[$i][op]", $this->operators, $val["op"], $change_next);
-				echo "<input type='search' name='where[$i][val]' value='" . h($val["val"]) . "'>";
-				echo script("mixin(qsl('input'), {oninput: function () { $change_next }, onkeydown: selectSearchKeydown, onsearch: selectSearchSearch});", "");
-				echo "<input type='image' src='../adminer/static/cross.gif' class='jsonly icon' title='", h(lang('Remove')), "' alt='x'>";
-				echo script('qsl(".icon").onclick = selectRemoveRow;', "");
-				echo "</div>\n";
+		if (isset($_GET["where"])) {
+			foreach (array_merge((array) $_GET["where"], array(array())) as $i => $val) {
+				if (!$val || ("$val[col]$val[val]" != "" && in_array($val["op"], $this->operators))) {
+					echo "<div>" . select_input(
+						" name='where[$i][col]'",
+						$columns,
+						$val["col"],
+						($val ? "selectFieldChange" : "selectAddRow"),
+						"(" . lang('anywhere') . ")"
+					);
+					echo html_select("where[$i][op]", $this->operators, $val["op"], $change_next);
+					echo "<input type='search' name='where[$i][val]' value='" . h($val["val"]) . "'>";
+					echo script("mixin(qsl('input'), {oninput: function () { $change_next }, onkeydown: selectSearchKeydown, onsearch: selectSearchSearch});", "");
+					echo "<input type='image' src='../adminer/static/cross.gif' class='jsonly icon' title='", h(lang('Remove')), "' alt='x'>";
+					echo script('qsl(".icon").onclick = selectRemoveRow;', "");
+					echo "</div>\n";
+				}
 			}
 		}
 		echo "</div></fieldset>\n";
@@ -427,14 +429,16 @@ class Adminer {
 	function selectOrderPrint($order, $columns, $indexes) {
 		print_fieldset("sort", lang('Sort'), $order);
 		$i = 0;
-		foreach ((array) $_GET["order"] as $key => $val) {
-			if ($val != "") {
-				echo "<div>" . select_input(" name='order[$i]'", $columns, $val, "selectFieldChange");
-				echo checkbox("desc[$i]", 1, isset($_GET["desc"][$key]), lang('descending'));
-				echo " <input type='image' src='../adminer/static/cross.gif' class='jsonly icon' title='", h(lang('Remove')), "' alt='x'>";
-				echo script('qsl(".icon").onclick = selectRemoveRow;', "");
-				echo "</div>\n";
-				$i++;
+		if (isset($_GET["order"])) {
+			foreach ((array) $_GET["order"] as $key => $val) {
+				if ($val != "") {
+					echo "<div>" . select_input(" name='order[$i]'", $columns, $val, "selectFieldChange");
+					echo checkbox("desc[$i]", 1, isset($_GET["desc"][$key]), lang('descending'));
+					echo " <input type='image' src='../adminer/static/cross.gif' class='jsonly icon' title='", h(lang('Remove')), "' alt='x'>";
+					echo script('qsl(".icon").onclick = selectRemoveRow;', "");
+					echo "</div>\n";
+					$i++;
+				}
 			}
 		}
 		echo "<div>" . select_input(" name='order[$i]'", $columns, "", "selectAddRow");
@@ -526,11 +530,13 @@ class Adminer {
 		global $functions, $grouping;
 		$select = array(); // select expressions, empty for *
 		$group = array(); // expressions without aggregation - will be used for GROUP BY if an aggregation function is used
-		foreach ((array) $_GET["columns"] as $key => $val) {
-			if ($val["fun"] == "count" || ($val["col"] != "" && (!$val["fun"] || in_array($val["fun"], $functions) || in_array($val["fun"], $grouping)))) {
-				$select[$key] = apply_sql_function($val["fun"], ($val["col"] != "" ? idf_escape($val["col"]) : "*"));
-				if (!in_array($val["fun"], $grouping)) {
-					$group[] = $select[$key];
+		if (isset($_GET["columns"])) {
+			foreach ((array) $_GET["columns"] as $key => $val) {
+				if ($val["fun"] == "count" || ($val["col"] != "" && (!$val["fun"] || in_array($val["fun"], $functions) || in_array($val["fun"], $grouping)))) {
+					$select[$key] = apply_sql_function($val["fun"], ($val["col"] != "" ? idf_escape($val["col"]) : "*"));
+					if (!in_array($val["fun"], $grouping)) {
+						$group[] = $select[$key];
+					}
 				}
 			}
 		}
@@ -550,39 +556,41 @@ class Adminer {
 				$return[] = "MATCH (" . implode(", ", array_map('idf_escape', $index["columns"])) . ") AGAINST (" . q($_GET["fulltext"][$i]) . (isset($_GET["boolean"][$i]) ? " IN BOOLEAN MODE" : "") . ")";
 			}
 		}
-		foreach ((array) $_GET["where"] as $key => $val) {
-			if ("$val[col]$val[val]" != "" && in_array($val["op"], $this->operators)) {
-				$prefix = "";
-				$cond = " $val[op]";
-				if (preg_match('~IN$~', $val["op"])) {
-					$in = process_length($val["val"]);
-					$cond .= " " . ($in != "" ? $in : "(NULL)");
-				} elseif ($val["op"] == "SQL") {
-					$cond = " $val[val]"; // SQL injection
-				} elseif ($val["op"] == "LIKE %%") {
-					$cond = " LIKE " . $this->processInput($fields[$val["col"]], "%$val[val]%");
-				} elseif ($val["op"] == "ILIKE %%") {
-					$cond = " ILIKE " . $this->processInput($fields[$val["col"]], "%$val[val]%");
-				} elseif ($val["op"] == "FIND_IN_SET") {
-					$prefix = "$val[op](" . q($val["val"]) . ", ";
-					$cond = ")";
-				} elseif (!preg_match('~NULL$~', $val["op"])) {
-					$cond .= " " . $this->processInput($fields[$val["col"]], $val["val"]);
-				}
-				if ($val["col"] != "") {
-					$return[] = $prefix . $driver->convertSearch(idf_escape($val["col"]), $val, $fields[$val["col"]]) . $cond;
-				} else {
-					// find anywhere
-					$cols = array();
-					foreach ($fields as $name => $field) {
-						if ((preg_match('~^[-\d.' . (preg_match('~IN$~', $val["op"]) ? ',' : '') . ']+$~', $val["val"]) || !preg_match('~' . number_type() . '|bit~', $field["type"]))
-							&& (!preg_match("~[\x80-\xFF]~", $val["val"]) || preg_match('~char|text|enum|set~', $field["type"]))
-							&& (!preg_match('~date|timestamp~', $field["type"]) || preg_match('~^\d+-\d+-\d+~', $val["val"]))
-						) {
-							$cols[] = $prefix . $driver->convertSearch(idf_escape($name), $val, $field) . $cond;
-						}
+		if (isset($_GET["where"])) {
+			foreach ((array) $_GET["where"] as $key => $val) {
+				if ("$val[col]$val[val]" != "" && in_array($val["op"], $this->operators)) {
+					$prefix = "";
+					$cond = " $val[op]";
+					if (preg_match('~IN$~', $val["op"])) {
+						$in = process_length($val["val"]);
+						$cond .= " " . ($in != "" ? $in : "(NULL)");
+					} elseif ($val["op"] == "SQL") {
+						$cond = " $val[val]"; // SQL injection
+					} elseif ($val["op"] == "LIKE %%") {
+						$cond = " LIKE " . $this->processInput($fields[$val["col"]], "%$val[val]%");
+					} elseif ($val["op"] == "ILIKE %%") {
+						$cond = " ILIKE " . $this->processInput($fields[$val["col"]], "%$val[val]%");
+					} elseif ($val["op"] == "FIND_IN_SET") {
+						$prefix = "$val[op](" . q($val["val"]) . ", ";
+						$cond = ")";
+					} elseif (!preg_match('~NULL$~', $val["op"])) {
+						$cond .= " " . $this->processInput($fields[$val["col"]], $val["val"]);
 					}
-					$return[] = ($cols ? "(" . implode(" OR ", $cols) . ")" : "1 = 0");
+					if ($val["col"] != "") {
+						$return[] = $prefix . $driver->convertSearch(idf_escape($val["col"]), $val, $fields[$val["col"]]) . $cond;
+					} else {
+						// find anywhere
+						$cols = array();
+						foreach ($fields as $name => $field) {
+							if ((preg_match('~^[-\d.' . (preg_match('~IN$~', $val["op"]) ? ',' : '') . ']+$~', $val["val"]) || !preg_match('~' . number_type() . '|bit~', $field["type"]))
+								&& (!preg_match("~[\x80-\xFF]~", $val["val"]) || preg_match('~char|text|enum|set~', $field["type"]))
+								&& (!preg_match('~date|timestamp~', $field["type"]) || preg_match('~^\d+-\d+-\d+~', $val["val"]))
+							) {
+								$cols[] = $prefix . $driver->convertSearch(idf_escape($name), $val, $field) . $cond;
+							}
+						}
+						$return[] = ($cols ? "(" . implode(" OR ", $cols) . ")" : "1 = 0");
+					}
 				}
 			}
 		}
@@ -596,11 +604,13 @@ class Adminer {
 	*/
 	function selectOrderProcess($fields, $indexes) {
 		$return = array();
-		foreach ((array) $_GET["order"] as $key => $val) {
-			if ($val != "") {
-				$return[] = (preg_match('~^((COUNT\(DISTINCT |[A-Z0-9_]+\()(`(?:[^`]|``)+`|"(?:[^"]|"")+")\)|COUNT\(\*\))$~', $val) ? $val : idf_escape($val)) //! MS SQL uses []
-					. (isset($_GET["desc"][$key]) ? " DESC" : "")
-				;
+		if (isset($_GET["order"])) {
+			foreach ((array) $_GET["order"] as $key => $val) {
+				if ($val != "") {
+					$return[] = (preg_match('~^((COUNT\(DISTINCT |[A-Z0-9_]+\()(`(?:[^`]|``)+`|"(?:[^"]|"")+")\)|COUNT\(\*\))$~', $val) ? $val : idf_escape($val)) //! MS SQL uses []
+						. (isset($_GET["desc"][$key]) ? " DESC" : "")
+					;
+				}
 			}
 		}
 		return $return;

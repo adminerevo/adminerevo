@@ -544,6 +544,11 @@ if (!defined("DRIVER")) {
 		$return = array();
 		foreach (get_rows("SHOW FULL COLUMNS FROM " . table($table)) as $row) {
 			preg_match('~^([^( ]+)(?:\((.+)\))?( unsigned)?( zerofill)?$~', $row["Type"], $match);
+			for ($i = 0; $i < 5; $i++) {
+				if (isset($match[$i]) === false) {
+					$match[$i] = null;
+				}
+			}
 			$return[$row["Field"]] = array(
 				"field" => $row["Field"],
 				"full_type" => $row["Type"],
