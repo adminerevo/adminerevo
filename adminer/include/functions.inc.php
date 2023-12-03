@@ -595,7 +595,10 @@ function stop_session($force = false) {
 * @return mixed
 */
 function &get_session($key) {
-	return $_SESSION[$key][DRIVER][SERVER][$_GET["username"]];
+	if (isset($_GET["username"]) && isset($_SESSION[$key][DRIVER][SERVER][$_GET["username"]])) {
+		return $_SESSION[$key][DRIVER][SERVER][$_GET["username"]];
+	}
+	return null;
 }
 
 /** Set session variable for current server
@@ -630,7 +633,10 @@ function auth_url($vendor, $server, $username, $db = null) {
 * @return bool
 */
 function is_ajax() {
-	return ($_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest");
+	if (isset($_SERVER["HTTP_X_REQUESTED_WITH"])) {
+		return ($_SERVER["HTTP_X_REQUESTED_WITH"] == "XMLHttpRequest");
+	}
+	return false;
 }
 
 /** Send Location header and exit

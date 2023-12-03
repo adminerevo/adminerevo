@@ -63,7 +63,7 @@ function get_lang() {
 */
 function lang($idf, $number = null) {
 	global $LANG, $translations;
-	$translation = ($translations[$idf] ? $translations[$idf] : $idf);
+	$translation = (isset($translations[$idf]) ? $translations[$idf] : $idf);
 	if (is_array($translation)) {
 		$pos = ($number == 1 ? 0
 			: ($LANG == 'cs' || $LANG == 'sk' ? ($number && $number < 5 ? 1 : 2) // different forms for 1, 2-4, other
@@ -102,10 +102,10 @@ if (isset($_POST["lang"]) && verify_token()) { // $error not yet available
 }
 
 $LANG = "en";
-if (isset($langs[$_COOKIE["adminer_lang"]])) {
+if (isset($_COOKIE["adminer_lang"]) && isset($langs[$_COOKIE["adminer_lang"]])) {
 	cookie("adminer_lang", $_COOKIE["adminer_lang"]);
 	$LANG = $_COOKIE["adminer_lang"];
-} elseif (isset($langs[$_SESSION["lang"]])) {
+} elseif (isset($_SESSION["lang"]) && isset($langs[$_SESSION["lang"]])) {
 	$LANG = $_SESSION["lang"];
 } else {
 	$accept_language = array();

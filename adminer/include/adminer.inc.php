@@ -121,9 +121,9 @@ class Adminer {
 		echo "<table cellspacing='0' class='layout'>\n";
 		echo $this->loginFormField('driver', '<tr><th>' . lang('System') . '<td>', html_select("auth[driver]", $drivers, DRIVER, "loginDriver(this);") . "\n");
 		echo $this->loginFormField('server', '<tr><th>' . lang('Server') . '<td>', '<input name="auth[server]" value="' . h(SERVER) . '" title="hostname[:port]" placeholder="localhost" autocapitalize="off">' . "\n");
-		echo $this->loginFormField('username', '<tr><th>' . lang('Username') . '<td>', '<input name="auth[username]" id="username" value="' . h($_GET["username"]) . '" autocomplete="username" autocapitalize="off">' . script("focus(qs('#username')); qs('#username').form['auth[driver]'].onchange();"));
+		echo $this->loginFormField('username', '<tr><th>' . lang('Username') . '<td>', '<input name="auth[username]" id="username" value="' . h((isset($_GET["username"]) ? $_GET["username"] : "")) . '" autocomplete="username" autocapitalize="off">' . script("focus(qs('#username')); qs('#username').form['auth[driver]'].onchange();"));
 		echo $this->loginFormField('password', '<tr><th>' . lang('Password') . '<td>', '<input type="password" name="auth[password]" autocomplete="current-password">' . "\n");
-		echo $this->loginFormField('db', '<tr><th>' . lang('Database') . '<td>', '<input name="auth[db]" value="' . h($_GET["db"]) . '" autocapitalize="off">' . "\n");
+		echo $this->loginFormField('db', '<tr><th>' . lang('Database') . '<td>', '<input name="auth[db]" value="' . h((isset($_GET["db"]) ? $_GET["db"] : "")) . '" autocapitalize="off">' . "\n");
 		echo "</table>\n";
 		echo "<p><input type='submit' value='" . lang('Login') . "'>\n";
 		echo checkbox("auth[permanent]", 1, $_COOKIE["adminer_permanent"], lang('Permanent login')) . "\n";
@@ -968,13 +968,15 @@ class Adminer {
 <?php
 		if ($missing == "auth") {
 			$output = "";
-			foreach ((array) $_SESSION["pwds"] as $vendor => $servers) {
-				foreach ($servers as $server => $usernames) {
-					foreach ($usernames as $username => $password) {
-						if ($password !== null) {
-							$dbs = $_SESSION["db"][$vendor][$server][$username];
-							foreach (($dbs ? array_keys($dbs) : array("")) as $db) {
-								$output .= "<li><a href='" . h(auth_url($vendor, $server, $username, $db)) . "'>($drivers[$vendor]) " . h($username . ($server != "" ? "@" . $this->serverName($server) : "") . ($db != "" ? " - $db" : "")) . "</a>\n";
+			if (isset( $_SESSION["pwds"])) {
+				foreach ((array) $_SESSION["pwds"] as $vendor => $servers) {
+					foreach ($servers as $server => $usernames) {
+						foreach ($usernames as $username => $password) {
+							if ($password !== null) {
+								$dbs = $_SESSION["db"][$vendor][$server][$username];
+								foreach (($dbs ? array_keys($dbs) : array("")) as $db) {
+									$output .= "<li><a href='" . h(auth_url($vendor, $server, $username, $db)) . "'>($drivers[$vendor]) " . h($username . ($server != "" ? "@" . $this->serverName($server) : "") . ($db != "" ? " - $db" : "")) . "</a>\n";
+								}
 							}
 						}
 					}
