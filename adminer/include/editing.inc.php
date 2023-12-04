@@ -105,7 +105,7 @@ function referencable_primary($self) {
 		if ($table_name != $self && fk_support($table)) {
 			foreach (fields($table_name) as $field) {
 				if ($field["primary"]) {
-					if ($return[$table_name]) { // multi column primary key
+					if (isset($return[$table_name]) && $return[$table_name]) { // multi column primary key
 						unset($return[$table_name]);
 						break;
 					}
@@ -121,7 +121,10 @@ function referencable_primary($self) {
 * @return array
 */
 function adminer_settings() {
-	parse_str($_COOKIE["adminer_settings"], $settings);
+	$settings = [];
+	if (isset($_COOKIE["adminer_settings"])) {
+		parse_str($_COOKIE["adminer_settings"], $settings);
+	}
 	return $settings;
 }
 
@@ -131,7 +134,7 @@ function adminer_settings() {
 */
 function adminer_setting($key) {
 	$settings = adminer_settings();
-	return $settings[$key];
+	return (isset($settings[$key]) ? $settings[$key] : null);
 }
 
 /** Store settings to a cookie
@@ -183,10 +186,10 @@ if ($foreign_keys) {
 }
 echo optionlist(array_merge($extra_types, $structured_types), $type);
 ?></select><td><input name="<?php echo h($key); ?>[length]" value="<?php echo h($field["length"]); ?>" size="3"<?php echo (!$field["length"] && preg_match('~var(char|binary)$~', $type) ? " class='required'" : ""); //! type="number" with enabled JavaScript ?> aria-labelledby="label-length"><td class="options"><?php
-	echo "<select name='" . h($key) . "[collation]'" . (preg_match('~(char|text|enum|set)$~', $type) ? "" : " class='hidden'") . '><option value="">(' . lang('collation') . ')' . optionlist($collations, $field["collation"]) . '</select>';
-	echo ($unsigned ? "<select name='" . h($key) . "[unsigned]'" . (!$type || preg_match(number_type(), $type) ? "" : " class='hidden'") . '><option>' . optionlist($unsigned, $field["unsigned"]) . '</select>' : '');
-	echo (isset($field['on_update']) ? "<select name='" . h($key) . "[on_update]'" . (preg_match('~timestamp|datetime~', $type) ? "" : " class='hidden'") . '>' . optionlist(array("" => "(" . lang('ON UPDATE') . ")", "CURRENT_TIMESTAMP"), (preg_match('~^CURRENT_TIMESTAMP~i', $field["on_update"]) ? "CURRENT_TIMESTAMP" : $field["on_update"])) . '</select>' : '');
-	echo ($foreign_keys ? "<select name='" . h($key) . "[on_delete]'" . (preg_match("~`~", $type) ? "" : " class='hidden'") . "><option value=''>(" . lang('ON DELETE') . ")" . optionlist(explode("|", $on_actions), $field["on_delete"]) . "</select> " : " "); // space for IE
+	echo "<select name='" . h($key) . "[collation]'" . (preg_match('~(char|text|enum|set)$~', $type) ? "" : " class='hidden'") . '><option value="">(' . lang('collation') . ')' . optionlist($collations, (isset($field["collation"]) ? $field["collation"] : null)) . '</select>';
+	echo ($unsigned ? "<select name='" . h($key) . "[unsigned]'" . (!$type || preg_match(number_type(), $type) ? "" : " class='hidden'") . '><option>' . optionlist($unsigned, (isset($field["unsigned"]) ? $field["unsigned"] : null)) . '</select>' : '');
+	echo (isset($field['on_update']) ? "<select name='" . h($key) . "[on_update]'" . (preg_match('~timestamp|datetime~', $type) ? "" : " class='hidden'") . '>' . optionlist(array("" => "(" . lang('ON UPDATE') . ")", "CURRENT_TIMESTAMP"), (preg_match('~^CURRENT_TIMESTAMP~i', (isset($field["on_update"]) ? $field["on_update"] : null)) ? "CURRENT_TIMESTAMP" : $field["on_update"])) . '</select>' : '');
+	echo ($foreign_keys ? "<select name='" . h($key) . "[on_delete]'" . (preg_match("~`~", $type) ? "" : " class='hidden'") . "><option value=''>(" . lang('ON DELETE') . ")" . optionlist(explode("|", $on_actions), (isset($field["on_delete"]) ? $field["on_delete"] : null)) . "</select> " : " "); // space for IE
 }
 
 /** Filter length value including enums
@@ -227,11 +230,11 @@ function process_field($field, $type_field) {
 	return array(
 		idf_escape(trim($field["field"])),
 		process_type($type_field),
-		($field["null"] ? " NULL" : " NOT NULL"), // NULL for timestamp
+		(isset($field["null"]) && $field["null"] ? " NULL" : " NOT NULL"), // NULL for timestamp
 		default_value($field),
 		(preg_match('~timestamp|datetime~', $field["type"]) && $field["on_update"] ? " ON UPDATE $field[on_update]" : ""),
 		(support("comment") && $field["comment"] != "" ? " COMMENT " . q($field["comment"]) : ""),
-		($field["auto_increment"] ? auto_increment() : null),
+		(isset($field["auto_increment"]) && $field["auto_increment"] ? auto_increment() : null),
 	);
 }
 
@@ -328,7 +331,7 @@ function edit_fields($fields, $collations, $type = "TABLE", $foreign_keys = arra
 */
 function process_fields(&$fields) {
 	$offset = 0;
-	if ($_POST["up"]) {
+	if (isset($_POST["up"]) && $_POST["up"]) {
 		$last = 0;
 		foreach ($fields as $key => $field) {
 			if (key($_POST["up"]) == $key) {
@@ -341,7 +344,7 @@ function process_fields(&$fields) {
 			}
 			$offset++;
 		}
-	} elseif ($_POST["down"]) {
+	} elseif (isset($_POST["down"]) && $_POST["down"]) {
 		$found = false;
 		foreach ($fields as $key => $field) {
 			if (isset($field["field"]) && $found) {
@@ -354,10 +357,10 @@ function process_fields(&$fields) {
 			}
 			$offset++;
 		}
-	} elseif ($_POST["add"]) {
+	} elseif (isset($_POST["add"]) && $_POST["add"]) {
 		$fields = array_values($fields);
 		array_splice($fields, key($_POST["add"]), 0, array(array()));
-	} elseif (!$_POST["drop_col"]) {
+	} elseif (isset($_POST["drop_col"]) === false || !$_POST["drop_col"]) {
 		return false;
 	}
 	return true;

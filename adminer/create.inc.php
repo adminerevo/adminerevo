@@ -22,17 +22,26 @@ if ($TABLE != "") {
 }
 
 $row = $_POST;
-$row["fields"] = (array) $row["fields"];
-if ($row["auto_increment_col"]) {
+if (isset($row["fields"])) {
+	$row["fields"] = (array) $row["fields"];
+}
+if (isset($row["auto_increment_col"]) && $row["auto_increment_col"]) {
 	$row["fields"][$row["auto_increment_col"]]["auto_increment"] = true;
 }
 
 if ($_POST) {
-	set_adminer_settings(array("comments" => $_POST["comments"], "defaults" => $_POST["defaults"]));
+	$array = [];
+	if (isset($_POST["comments"])) {
+		$array["comments"] = $_POST["comments"];
+	}
+	if (isset($_POST["defaults"])) {
+		$array["defaults"] = $_POST["defaults"];
+	}
+	set_adminer_settings($array);
 }
 
 if ($_POST && !process_fields($row["fields"]) && !$error) {
-	if ($_POST["drop"]) {
+	if (isset($_POST["drop"]) && $_POST["drop"]) {
 		queries_redirect(substr(ME, 0, -1), lang('Table has been dropped.'), drop_tables(array($TABLE)));
 	} else {
 		$fields = array();
@@ -43,10 +52,13 @@ if ($_POST && !process_fields($row["fields"]) && !$error) {
 		$after = " FIRST";
 
 		foreach ($row["fields"] as $key => $field) {
-			$foreign_key = $foreign_keys[$field["type"]];
+			$foreign_key = null;
+			if (isset($field["type"]) && isset($foreign_keys[$field["type"]])) {
+				$foreign_key = $foreign_keys[$field["type"]];
+			}
 			$type_field = ($foreign_key !== null ? $referencable_primary[$foreign_key] : $field); //! can collide with user defined type
 			if ($field["field"] != "") {
-				if (!$field["has_default"]) {
+				if (isset($field["has_default"]) === false || !$field["has_default"]) {
 					$field["default"] = null;
 				}
 				if ($key == $row["auto_increment_col"]) {
@@ -123,7 +135,7 @@ page_header(($TABLE != "" ? lang('Alter table') : lang('Create table')), $error,
 
 if (!$_POST) {
 	$row = array(
-		"Engine" => $_COOKIE["adminer_engine"],
+		"Engine" => (isset($_COOKIE["adminer_engine"]) ? $_COOKIE["adminer_engine"] : null),
 		"fields" => array(array("field" => "", "type" => (isset($types["int"]) ? "int" : (isset($types["integer"]) ? "integer" : "")), "on_update" => "")),
 		"partition_names" => array(""),
 	);
@@ -132,7 +144,7 @@ if (!$_POST) {
 		$row = $table_status;
 		$row["name"] = $TABLE;
 		$row["fields"] = array();
-		if (!$_GET["auto_increment"]) { // don't prefill by original Auto_increment for the sake of performance and not reusing deleted ids
+		if (isset($_GET["auto_increment"]) === false || !$_GET["auto_increment"]) { // don't prefill by original Auto_increment for the sake of performance and not reusing deleted ids
 			$row["Auto_increment"] = "";
 		}
 		foreach ($orig_fields as $field) {

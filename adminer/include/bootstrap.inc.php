@@ -44,7 +44,7 @@ global $adminer, $connection, $driver, $drivers, $edit_functions, $enum_length, 
 if (!$_SERVER["REQUEST_URI"]) { // IIS 5 compatibility
 	$_SERVER["REQUEST_URI"] = $_SERVER["ORIG_PATH_INFO"];
 }
-if (!strpos($_SERVER["REQUEST_URI"], '?') && $_SERVER["QUERY_STRING"] != "") { // IIS 7 compatibility
+if (isset($_SERVER["QUERY_STRING"]) && !strpos($_SERVER["REQUEST_URI"], '?') && $_SERVER["QUERY_STRING"] != "") { // IIS 7 compatibility
 	$_SERVER["REQUEST_URI"] .= "?$_SERVER[QUERY_STRING]";
 }
 if (isset($_SERVER["HTTP_X_FORWARDED_PREFIX"]) && $_SERVER["HTTP_X_FORWARDED_PREFIX"]) {
