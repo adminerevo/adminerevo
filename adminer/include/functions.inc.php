@@ -490,21 +490,25 @@ function escape_key($key) {
 function where($where, $fields = array()) {
 	global $connection, $jush;
 	$return = array();
-	foreach ((array) $where["where"] as $key => $val) {
-		$key = bracket_escape($key, 1); // 1 - back
-		$column = escape_key($key);
-		$return[] = $column
-			. ($jush == "sql" && is_numeric($val) && preg_match('~\.~', $val) ? " LIKE " . q($val) // LIKE because of floats but slow with ints
-				: ($jush == "mssql" ? " LIKE " . q(preg_replace('~[_%[]~', '[\0]', $val)) // LIKE because of text
-				: " = " . unconvert_field($fields[$key], q($val))
-			))
-		; //! enum and set
-		if ($jush == "sql" && preg_match('~char|text~', $fields[$key]["type"] ?? null) && preg_match("~[^ -@]~", $val)) { // not just [a-z] to catch non-ASCII characters
-			$return[] = "$column = " . q($val) . " COLLATE " . charset($connection) . "_bin";
+	if (isset($where["where"])) {
+		foreach ((array) $where["where"] as $key => $val) {
+			$key = bracket_escape($key, 1); // 1 - back
+			$column = escape_key($key);
+			$return[] = $column
+				. ($jush == "sql" && is_numeric($val) && preg_match('~\.~', $val) ? " LIKE " . q($val) // LIKE because of floats but slow with ints
+					: ($jush == "mssql" ? " LIKE " . q(preg_replace('~[_%[]~', '[\0]', $val)) // LIKE because of text
+					: " = " . unconvert_field($fields[$key], q($val))
+				))
+			; //! enum and set
+			if ($jush == "sql" && preg_match('~char|text~', $fields[$key]["type"] ?? null) && preg_match("~[^ -@]~", $val)) { // not just [a-z] to catch non-ASCII characters
+				$return[] = "$column = " . q($val) . " COLLATE " . charset($connection) . "_bin";
+			}
 		}
 	}
-	foreach ((array) $where["null"] as $key) {
-		$return[] = escape_key($key) . " IS NULL";
+	if (isset($where["null"])) {
+		foreach ((array) $where["null"] as $key) {
+			$return[] = escape_key($key) . " IS NULL";
+		}
 	}
 	return implode(" AND ", $return);
 }
@@ -1003,7 +1007,7 @@ function input($field, $value, $function) {
 			echo "<textarea$attrs cols='50' rows='12' class='jush-js'>" . h($value) . '</textarea>';
 		} else {
 			// int(3) is only a display hint
-			$maxlength = (!preg_match('~int~', $field["type"]) && preg_match('~^(\d+)(,(\d+))?$~', $field["length"], $match) ? ((preg_match("~binary~", $field["type"]) ? 2 : 1) * $match[1] + ($match[3] ? 1 : 0) + ($match[2] && !$field["unsigned"] ? 1 : 0)) : ($types[$field["type"]] ? $types[$field["type"]] + ($field["unsigned"] ? 0 : 1) : 0));
+			$maxlength = (!preg_match('~int~', $field["type"]) && preg_match('~^(\d+)(,(\d+))?$~', $field["length"], $match) ? ((preg_match("~binary~", $field["type"]) ? 2 : 1) * $match[1] + (isset($match[3]) && $match[3] ? 1 : 0) + (isset($match[2]) && $match[2] && !$field["unsigned"] ? 1 : 0)) : ($types[$field["type"]] ? $types[$field["type"]] + ($field["unsigned"] ? 0 : 1) : 0));
 			if ($jush == 'sql' && min_version(5.6) && preg_match('~time~', $field["type"])) {
 				$maxlength += 7; // microtime
 			}
@@ -1511,20 +1515,23 @@ function edit_form($table, $fields, $row, $update) {
 					: (isset($_GET["select"]) ? false : $default)
 				)
 			);
-			if (!$_POST["save"] && is_string($value)) {
+			if ((isset($_POST["save"]) === false || !$_POST["save"]) && is_string($value)) {
 				$value = $adminer->editVal($value, $field);
 			}
 			$fname = null;
 			if (isset($_POST["function"][$name])) {
 				$fname = (string)$_POST["function"][$name];
 			}
-			$function = ($_POST["save"]
-				? $fname
-				: ($update && preg_match('~^CURRENT_TIMESTAMP~i', $field["on_update"])
-					? "now"
-					: ($value === false ? null : ($value !== null ? '' : 'NULL'))
-				)
-			);
+			$function = null;
+			if (isset($_POST["save"])) {
+				$function = ($_POST["save"]
+					? $fname
+					: ($update && preg_match('~^CURRENT_TIMESTAMP~i', $field["on_update"])
+						? "now"
+						: ($value === false ? null : ($value !== null ? '' : 'NULL'))
+					)
+				);
+			}
 			if (!$_POST && !$update && $value == $field["default"] && preg_match('~^[\w.]+\(~', $value)) {
 				$function = "SQL";
 			}

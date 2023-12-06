@@ -1,14 +1,14 @@
 <?php
 $connection = '';
 
-$has_token = $_SESSION["token"];
+$has_token = isset($_SESSION["token"]) && $_SESSION["token"];
 if (!$has_token) {
 	$_SESSION["token"] = rand(1, 1e6); // defense against cross-site request forgery
 }
 $token = get_token(); ///< @var string CSRF protection
 
 $permanent = array();
-if ($_COOKIE["adminer_permanent"]) {
+if (isset($_COOKIE["adminer_permanent"]) && $_COOKIE["adminer_permanent"]) {
 	foreach (explode(" ", $_COOKIE["adminer_permanent"]) as $val) {
 		list($key) = explode(":", $val);
 		$permanent[$key] = $val;
@@ -59,11 +59,11 @@ function check_invalid_login() {
 $auth = (isset($_POST["auth"]) ? $_POST["auth"] : null);
 if ($auth) {
 	session_regenerate_id(); // defense against session fixation
-	$vendor = $auth["driver"];
-	$server = $auth["server"];
-	$username = $auth["username"];
-	$password = (string) $auth["password"];
-	$db = $auth["db"];
+	$vendor = isset($auth["driver"]) ? $auth["driver"] : null;
+	$server = isset($auth["server"]) ? $auth["server"] : null;
+	$username = isset($auth["username"]) ? $auth["username"] : null;
+	$password = isset($auth["password"]) ? (string) $auth["password"] : null;
+	$db = isset($auth["db"]) ? $auth["db"] : null;
 	set_password($vendor, $server, $username, $password);
 	$_SESSION["db"][$vendor][$server][$username][$db] = true;
 	if ($auth["permanent"]) {

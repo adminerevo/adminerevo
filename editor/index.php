@@ -11,7 +11,7 @@ $GLOBALS['project'] = basename(dirname(__FILE__));
 include "../adminer/include/bootstrap.inc.php";
 $drivers[DRIVER] = lang('Login');
 
-if (isset($_GET["select"]) && ($_POST["edit"] || $_POST["clone"]) && !$_POST["save"]) {
+if (isset($_GET["select"]) && ((isset($_POST["edit"]) && $_POST["edit"]) || (isset($_POST["clone"]) && $_POST["clone"])) && (isset($_POST["save"]) === false || !$_POST["save"])) {
 	$_GET["edit"] = $_GET["select"];
 }
 

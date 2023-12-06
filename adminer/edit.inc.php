@@ -11,14 +11,14 @@ foreach ($fields as $name => $field) {
 
 if ($_POST && !$error && !isset($_GET["select"])) {
 	$location = $_POST["referer"];
-	if ($_POST["insert"]) { // continue edit or insert
+	if (isset($_POST["insert"]) && $_POST["insert"]) { // continue edit or insert
 		$location = ($update ? null : $_SERVER["REQUEST_URI"]);
 	} elseif (!preg_match('~^.+&select=.+$~', $location)) {
 		$location = ME . "select=" . urlencode($TABLE);
 	}
 
 	$indexes = indexes($TABLE);
-	$unique_array = unique_array($_GET["where"], $indexes);
+	$unique_array = unique_array((isset($_GET["where"]) ? $_GET["where"] : []), $indexes);
 	$query_where = "\nWHERE $where";
 
 	if (isset($_POST["delete"])) {
@@ -60,14 +60,14 @@ if ($_POST && !$error && !isset($_GET["select"])) {
 }
 
 $row = null;
-if ($_POST["save"]) {
+if (isset($_POST["save"]) &&$_POST["save"]) {
 	$row = (array) $_POST["fields"];
 } elseif ($where) {
 	$select = array();
 	foreach ($fields as $name => $field) {
 		if (isset($field["privileges"]["select"])) {
 			$as = convert_field($field);
-			if ($_POST["clone"] && $field["auto_increment"]) {
+			if (isset($_POST["clone"]) && $_POST["clone"] && isset($field["auto_increment"]) && $field["auto_increment"]) {
 				$as = "''";
 			}
 			if ($jush == "sql" && preg_match("~enum|set~", $field["type"])) {
