@@ -134,7 +134,7 @@ function auth_error($error) {
 			unset_permanent();
 		}
 	}
-	if (!$_COOKIE[$session_name] && $_GET[$session_name] && ini_bool("session.use_only_cookies")) {
+	if ((isset($_COOKIE[$session_name]) === false || !$_COOKIE[$session_name]) && (isset($_GET[$session_name]) && $_GET[$session_name]) && ini_bool("session.use_only_cookies")) {
 		$error = lang('Session support must be enabled.');
 	}
 	$params = session_get_cookie_params();

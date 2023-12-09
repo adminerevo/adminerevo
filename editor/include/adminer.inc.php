@@ -418,10 +418,10 @@ ORDER BY ORDINAL_POSITION", null, "") as $row) { //! requires MySQL 5
 	}
 
 	function selectEmailProcess($where, $foreignKeys) {
-		if ($_POST["email_append"]) {
+		if (isset($_POST["email_append"]) && $_POST["email_append"]) {
 			return true;
 		}
-		if ($_POST["email"]) {
+		if (isset($_POST["email"]) && $_POST["email"]) {
 			$sent = 0;
 			if ($_POST["all"] || $_POST["check"]) {
 				$field = idf_escape($_POST["email_field"]);

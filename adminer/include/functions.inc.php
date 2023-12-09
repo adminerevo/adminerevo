@@ -1568,7 +1568,7 @@ function edit_form($table, $fields, $row, $update) {
 		: ($_POST || !$fields ? "" : script("focus(qsa('td', qs('#form'))[1].firstChild);"))
 	);
 	if (isset($_GET["select"])) {
-		hidden_fields(array("check" => (array) $_POST["check"], "clone" => $_POST["clone"], "all" => $_POST["all"]));
+		hidden_fields(array("check" => (array) isset($_POST["check"]) ? $_POST["check"] : null, "clone" => isset($_POST["clone"]) ? $_POST["clone"] : null, "all" => isset($_POST["all"]) ? $_POST["all"] : null));
 	}
 	?>
 <input type="hidden" name="referer" value="<?php echo h(isset($_POST["referer"]) ? $_POST["referer"] : $_SERVER["HTTP_REFERER"]); ?>">

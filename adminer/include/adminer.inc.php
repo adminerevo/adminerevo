@@ -126,7 +126,7 @@ class Adminer {
 		echo $this->loginFormField('db', '<tr><th>' . lang('Database') . '<td>', '<input name="auth[db]" value="' . h((isset($_GET["db"]) ? $_GET["db"] : "")) . '" autocapitalize="off">' . "\n");
 		echo "</table>\n";
 		echo "<p><input type='submit' value='" . lang('Login') . "'>\n";
-		echo checkbox("auth[permanent]", 1, $_COOKIE["adminer_permanent"], lang('Permanent login')) . "\n";
+		echo checkbox("auth[permanent]", 1, isset($_COOKIE["adminer_permanent"]) ? $_COOKIE["adminer_permanent"] : null, lang('Permanent login')) . "\n";
 	}
 
 	/** Get login form field

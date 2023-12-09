@@ -65,7 +65,7 @@ if ($oid && !$primary) {
 
 if ($_POST && !$error) {
 	$where_check = $where;
-	if (!$_POST["all"] && is_array($_POST["check"])) {
+	if ((isset($_POST["all"]) === false || !$_POST["all"]) && (isset($_POST["check"]) && is_array($_POST["check"]))) {
 		$checks = array();
 		foreach ($_POST["check"] as $check) {
 			$checks[] = where_check($check, $fields);
@@ -73,7 +73,7 @@ if ($_POST && !$error) {
 		$where_check[] = "((" . implode(") OR (", $checks) . "))";
 	}
 	$where_check = ($where_check ? "\nWHERE " . implode(" AND ", $where_check) : "");
-	if ($_POST["export"]) {
+	if (isset($_POST["export"]) && $_POST["export"]) {
 		cookie("adminer_import", "output=" . urlencode($_POST["output"]) . "&format=" . urlencode($_POST["format"]));
 		dump_headers($TABLE);
 		$adminer->dumpTable($TABLE, "");
@@ -96,11 +96,11 @@ if ($_POST && !$error) {
 	}
 
 	if (!$adminer->selectEmailProcess($where, $foreign_keys)) {
-		if ($_POST["save"] || $_POST["delete"]) { // edit
+		if ((isset($_POST["save"]) && $_POST["save"]) || (isset($_POST["delete"]) && $_POST["delete"])) { // edit
 			$result = true;
 			$affected = 0;
 			$set = array();
-			if (!$_POST["delete"]) {
+			if (isset($_POST["delete"]) === false || !$_POST["delete"]) {
 				foreach ($columns as $name => $val) { //! should check also for edit or insert privileges
 					$val = process_input($fields[$name]);
 					if ($val !== null && ($_POST["clone"] || $val !== false)) {
@@ -108,11 +108,11 @@ if ($_POST && !$error) {
 					}
 				}
 			}
-			if ($_POST["delete"] || $set) {
-				if ($_POST["clone"]) {
+			if ((isset($_POST["delete"]) && $_POST["delete"]) || $set) {
+				if (isset($_POST["clone"]) && $_POST["clone"]) {
 					$query = "INTO " . table($TABLE) . " (" . implode(", ", array_keys($set)) . ")\nSELECT " . implode(", ", $set) . "\nFROM " . table($TABLE);
 				}
-				if ($_POST["all"] || ($primary && is_array($_POST["check"])) || $is_group) {
+				if ((isset($_POST["all"]) && $_POST["all"]) || ($primary && isset($_POST["check"]) && is_array($_POST["check"])) || $is_group) {
 					$result = ($_POST["delete"]
 						? $driver->delete($TABLE, $where_check)
 						: ($_POST["clone"]
@@ -125,7 +125,7 @@ if ($_POST && !$error) {
 					foreach ((array) $_POST["check"] as $val) {
 						// where is not unique so OR can't be used
 						$where2 = "\nWHERE " . ($where ? implode(" AND ", $where) . " AND " : "") . where_check($val, $fields);
-						$result = ($_POST["delete"]
+						$result = (isset($_POST["delete"]) && $_POST["delete"]
 							? $driver->delete($TABLE, $where2, 1)
 							: ($_POST["clone"]
 								? queries("INSERT" . limit1($TABLE, $query, $where2))
@@ -140,13 +140,13 @@ if ($_POST && !$error) {
 				}
 			}
 			$message = lang('%d item(s) have been affected.', $affected);
-			if ($_POST["clone"] && $result && $affected == 1) {
+			if (isset($_POST["clone"]) && $_POST["clone"] && $result && $affected == 1) {
 				$last_id = last_id();
 				if ($last_id) {
 					$message = lang('Item%s has been inserted.', " $last_id");
 				}
 			}
-			queries_redirect(remove_from_uri($_POST["all"] && $_POST["delete"] ? "page" : ""), $message, $result);
+			queries_redirect(remove_from_uri(isset($_POST["all"]) && $_POST["all"] && isset($_POST["delete"]) && $_POST["delete"] ? "page" : ""), $message, $result);
 			if (!$_POST["delete"]) {
 				edit_form($TABLE, $fields, (array) $_POST["fields"], !$_POST["clone"]);
 				page_footer();
