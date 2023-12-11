@@ -234,7 +234,10 @@ if (isset($_GET["pgsql"])) {
 				"information_schema" => "infoschema",
 				"pg_catalog" => "catalog",
 			);
-			$link = $links[$_GET["ns"]];
+			$link = null;
+			if (isset($_GET["ns"]) && isset($links[$_GET["ns"]])) {
+				$links[$_GET["ns"]];
+			}
 			if ($link) {
 				return "$link-" . str_replace("_", "-", $name) . ".html";
 			}
@@ -467,7 +470,7 @@ ORDER BY connamespace, conname") as $row) {
 		global $connection;
 		$return = h($connection->error);
 		if (preg_match('~^(.*\n)?([^\n]*)\n( *)\^(\n.*)?$~s', $return, $match)) {
-			$return = $match[1] . preg_replace('~((?:[^&]|&[^;]*;){' . strlen($match[3]) . '})(.*)~', '\1<b>\2</b>', $match[2]) . $match[4];
+			$return = $match[1] . preg_replace('~((?:[^&]|&[^;]*;){' . strlen($match[3]) . '})(.*)~', '\1<b>\2</b>', $match[2]) . (isset($match[4]) ? $match[4] : null);
 		}
 		return nl_br($return);
 	}

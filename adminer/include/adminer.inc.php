@@ -318,7 +318,7 @@ class Adminer {
 		echo "<thead><tr><th>" . lang('Column') . "<td>" . lang('Type') . (support("comment") ? "<td>" . lang('Comment') : "") . "</thead>\n";
 		foreach ($fields as $field) {
 			echo "<tr" . odd() . "><th>" . h($field["field"]);
-			echo "<td><span title='" . h($field["collation"]) . "'>" . h($field["full_type"]) . "</span>";
+			echo "<td><span title='" . h(isset($field["collation"]) ? $field["collation"] : null) . "'>" . h(isset($field["full_type"]) ? $field["full_type"] : null) . "</span>";
 			echo ($field["null"] ? " <i>NULL</i>" : "");
 			echo ($field["auto_increment"] ? " <i>" . lang('Auto Increment') . "</i>" : "");
 			echo (isset($field["default"]) ? " <span title='" . lang('Default value') . "'>[<b>" . h($field["default"]) . "</b>]</span>" : "");
@@ -340,8 +340,8 @@ class Adminer {
 			$print = array();
 			foreach ($index["columns"] as $key => $val) {
 				$print[] = "<i>" . h($val) . "</i>"
-					. ($index["lengths"][$key] ? "(" . $index["lengths"][$key] . ")" : "")
-					. ($index["descs"][$key] ? " DESC" : "")
+					. (isset($index["lengths"][$key]) && $index["lengths"][$key] ? "(" . $index["lengths"][$key] . ")" : "")
+					. (isset($index["descs"][$key]) && $index["descs"][$key] ? " DESC" : "")
 				;
 			}
 			echo "<tr title='" . h($name) . "'><th>$index[type]<td>" . implode(", ", $print) . "\n";

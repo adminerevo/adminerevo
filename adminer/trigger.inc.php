@@ -1,6 +1,6 @@
 <?php
-$TABLE = $_GET["trigger"];
-$name = $_GET["name"];
+$TABLE = isset($_GET["trigger"]) ? $_GET["trigger"] : null;
+$name = isset($_GET["name"]) ? $_GET["name"] : null;
 $trigger_options = trigger_options();
 $row = (array) trigger($name, $TABLE) + array("Trigger" => $TABLE . "_bi");
 
@@ -10,7 +10,7 @@ if ($_POST) {
 		$on = " ON " . table($TABLE);
 		$drop = "DROP TRIGGER " . idf_escape($name) . ($jush == "pgsql" ? $on : "");
 		$location = ME . "table=" . urlencode($TABLE);
-		if ($_POST["drop"]) {
+		if (isset($_POST["drop"]) && $_POST["drop"]) {
 			query_redirect($drop, $location, lang('Trigger has been dropped.'));
 		} else {
 			if ($name != "") {
@@ -34,10 +34,10 @@ page_header(($name != "" ? lang('Alter trigger') . ": " . h($name) : lang('Creat
 
 <form action="" method="post" id="form">
 <table cellspacing="0" class="layout">
-<tr><th><?php echo lang('Time'); ?><td><?php echo html_select("Timing", $trigger_options["Timing"], $row["Timing"], "triggerChange(/^" . preg_quote($TABLE, "/") . "_[ba][iud]$/, '" . js_escape($TABLE) . "', this.form);"); ?>
-<tr><th><?php echo lang('Event'); ?><td><?php echo html_select("Event", $trigger_options["Event"], $row["Event"], "this.form['Timing'].onchange();"); ?>
-<?php echo (in_array("UPDATE OF", $trigger_options["Event"]) ? " <input name='Of' value='" . h($row["Of"]) . "' class='hidden'>": ""); ?>
-<tr><th><?php echo lang('Type'); ?><td><?php echo html_select("Type", $trigger_options["Type"], $row["Type"]); ?>
+<tr><th><?php echo lang('Time'); ?><td><?php echo html_select("Timing", isset($trigger_options["Timing"]) ? $trigger_options["Timing"] : null, isset($row["Timing"]) ? $row["Timing"] : null, "triggerChange(/^" . preg_quote($TABLE, "/") . "_[ba][iud]$/, '" . js_escape($TABLE) . "', this.form);"); ?>
+<tr><th><?php echo lang('Event'); ?><td><?php echo html_select("Event", isset($trigger_options["Event"]) ? $trigger_options["Event"] : null, isset($row["Event"]) ? $row["Event"] : null, "this.form['Timing'].onchange();"); ?>
+<?php echo (in_array("UPDATE OF", $trigger_options["Event"]) ? " <input name='Of' value='" . h(isset($row["Of"]) ? $row["Of"] : null) . "' class='hidden'>": ""); ?>
+<tr><th><?php echo lang('Type'); ?><td><?php echo html_select("Type", isset($trigger_options["Type"]) ? $trigger_options["Type"] : null, isset($row["Type"]) ? $row["Type"] : null); ?>
 </table>
 <p><?php echo lang('Name'); ?>: <input name="Trigger" value="<?php echo h($row["Trigger"]); ?>" data-maxlength="64" autocapitalize="off">
 <?php echo script("qs('#form')['Timing'].onchange();"); ?>

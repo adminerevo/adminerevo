@@ -61,7 +61,7 @@ if ($_POST && !process_fields($row["fields"]) && !$error) {
 				if (isset($field["has_default"]) === false || !$field["has_default"]) {
 					$field["default"] = null;
 				}
-				if ($key == $row["auto_increment_col"]) {
+				if (isset($row["auto_increment_col"]) && $key == $row["auto_increment_col"]) {
 					$field["auto_increment"] = true;
 				}
 				$process_field = process_field($field, $type_field);
@@ -178,7 +178,7 @@ foreach ($engines as $engine) {
 <form action="" method="post" id="form">
 <p>
 <?php if (support("columns") || $TABLE == "") { ?>
-<?php echo lang('Table name'); ?>: <input name="name" data-maxlength="64" value="<?php echo h($row["name"]); ?>" autocapitalize="off">
+<?php echo lang('Table name'); ?>: <input name="name" data-maxlength="64" value="<?php echo h(isset($row["name"]) ? $row["name"] : null); ?>" autocapitalize="off">
 <?php if ($TABLE == "" && !$_POST) { echo script("focus(qs('#form')['name']);"); } ?>
 <?php echo ($engines ? "<select name='Engine'>" . optionlist(array("" => "(" . lang('engine') . ")") + $engines, $row["Engine"]) . "</select>" . on_help("getTarget(event).value", 1) . script("qsl('select').onchange = helpClose;") : ""); ?>
  <?php echo ($collations && !preg_match("~sqlite|mssql~", $jush) ? html_select("Collation", array("" => "(" . lang('collation') . ")") + $collations, $row["Collation"]) : ""); ?>
@@ -201,9 +201,9 @@ edit_fields($row["fields"], $collations, "TABLE", $foreign_keys);
 $comments = ($_POST ? $_POST["comments"] : adminer_setting("comments"));
 echo (support("comment")
 	? checkbox("comments", 1, $comments, lang('Comment'), "editingCommentsClick(this, true);", "jsonly")
-		. ' ' . (preg_match('~\n~', $row["Comment"])
+		. ' ' . (preg_match('~\n~', isset($row["Comment"]) ? $row["Comment"] : null)
 			? "<textarea name='Comment' rows='2' cols='20'" . ($comments ? "" : " class='hidden'") . ">" . h($row["Comment"]) . "</textarea>"
-			: '<input name="Comment" value="' . h($row["Comment"]) . '" data-maxlength="' . (min_version(5.5) ? 2048 : 60) . '"' . ($comments ? "" : " class='hidden'") . '>'
+			: '<input name="Comment" value="' . h(isset($row["Comment"]) ? $row["Comment"] : null) . '" data-maxlength="' . (min_version(5.5) ? 2048 : 60) . '"' . ($comments ? "" : " class='hidden'") . '>'
 		)
 	: '')
 ;

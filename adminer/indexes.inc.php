@@ -72,7 +72,7 @@ if ($_POST && !$error && !$_POST["add"] && !$_POST["drop_col"]) {
 page_header(lang('Indexes'), $error, array("table" => $TABLE), h($TABLE));
 
 $fields = array_keys(fields($TABLE));
-if ($_POST["add"]) {
+if (isset($_POST["add"]) && $_POST["add"]) {
 	foreach ($row["indexes"] as $key => $index) {
 		if ($index["columns"][count($index["columns"])] != "") {
 			$row["indexes"][$key]["columns"][] = "";
@@ -113,8 +113,8 @@ if ($primary) {
 }
 $j = 1;
 foreach ($row["indexes"] as $index) {
-	if (!$_POST["drop_col"] || $j != key($_POST["drop_col"])) {
-		echo "<tr><td>" . html_select("indexes[$j][type]", array(-1 => "") + $index_types, $index["type"], ($j == count($row["indexes"]) ? "indexesAddRow.call(this);" : 1), "label-type");
+	if (isset($_POST["drop_col"]) === false || !$_POST["drop_col"] || $j != key($_POST["drop_col"])) {
+		echo "<tr><td>" . html_select("indexes[$j][type]", array(-1 => "") + $index_types, isset($index["type"]) ? $index["type"] : null, ($j == count($row["indexes"]) ? "indexesAddRow.call(this);" : 1), "label-type");
 
 		echo "<td>";
 		ksort($index["columns"]);
@@ -127,12 +127,12 @@ foreach ($row["indexes"] as $index) {
 				"partial(" . ($i == count($index["columns"]) ? "indexesAddColumn" : "indexesChangeColumn") . ", '" . js_escape($jush == "sql" ? "" : $_GET["indexes"] . "_") . "')"
 			);
 			echo ($jush == "sql" || $jush == "mssql" ? "<input type='number' name='indexes[$j][lengths][$i]' class='size' value='" . h($index["lengths"][$key]) . "' title='" . lang('Length') . "'>" : "");
-			echo (support("descidx") ? checkbox("indexes[$j][descs][$i]", 1, $index["descs"][$key], lang('descending')) : "");
+			echo (support("descidx") ? checkbox("indexes[$j][descs][$i]", 1, isset($index["descs"][$key]) ? $index["descs"][$key] : null, lang('descending')) : "");
 			echo " </span>";
 			$i++;
 		}
 
-		echo "<td><input name='indexes[$j][name]' value='" . h($index["name"]) . "' autocapitalize='off' aria-labelledby='label-name'>\n";
+		echo "<td><input name='indexes[$j][name]' value='" . h(isset($index["name"]) ? $index["name"] : null) . "' autocapitalize='off' aria-labelledby='label-name'>\n";
 		echo "<td><input type='image' class='icon' name='drop_col[$j]' src='../adminer/static/cross.gif' alt='x' title='" . lang('Remove') . "'>" . script("qsl('input').onclick = partial(editingRemoveRow, 'indexes\$1[type]');");
 	}
 	$j++;

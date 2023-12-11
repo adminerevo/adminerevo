@@ -1,5 +1,5 @@
 <?php
-if (!$error && $_POST["export"]) {
+if (!$error && isset($_POST["export"]) && $_POST["export"]) {
 	dump_headers("sql");
 	$adminer->dumpTable("", "");
 	$adminer->dumpData("", "table", $_POST["query"]);
@@ -9,7 +9,7 @@ if (!$error && $_POST["export"]) {
 restart_session();
 $history_all = &get_session("queries");
 $history = &$history_all[DB];
-if (!$error && $_POST["clear"]) {
+if (!$error && isset($_POST["clear"]) && $_POST["clear"]) {
 	$history = array();
 	redirect(remove_from_uri("history"));
 }
@@ -216,16 +216,16 @@ if (!isset($_GET["import"])) {
 	$q = $_GET["sql"]; // overwrite $q from if ($_POST) to save memory
 	if ($_POST) {
 		$q = $_POST["query"];
-	} elseif ($_GET["history"] == "all") {
+	} elseif (isset($_GET["history"]) && $_GET["history"] == "all") {
 		$q = $history;
-	} elseif ($_GET["history"] != "") {
+	} elseif (isset($_GET["history"]) && $_GET["history"] != "") {
 		$q = $history[$_GET["history"]][0];
 	}
 	echo "<p>";
 	textarea("query", $q, 20);
 	echo script(($_POST ? "" : "qs('textarea').focus();\n") . "qs('#form').onsubmit = partial(sqlSubmit, qs('#form'), '" . js_escape(remove_from_uri("sql|limit|error_stops|only_errors|history")) . "');");
 	echo "<p>$execute\n";
-	echo lang('Limit rows') . ": <input type='number' name='limit' class='size' value='" . h($_POST ? $_POST["limit"] : $_GET["limit"]) . "'>\n";
+	echo lang('Limit rows') . ": <input type='number' name='limit' class='size' value='" . h(isset($_POST["limit"]) ? $_POST["limit"] : (isset($_GET["limit"]) ? $_GET["limit"] : null)) . "'>\n";
 
 } else {
 	echo "<fieldset><legend>" . lang('File upload') . "</legend><div>";
@@ -245,8 +245,8 @@ if (!isset($_GET["import"])) {
 	echo "<p>";
 }
 
-echo checkbox("error_stops", 1, ($_POST ? $_POST["error_stops"] : isset($_GET["import"]) || $_GET["error_stops"]), lang('Stop on error')) . "\n";
-echo checkbox("only_errors", 1, ($_POST ? $_POST["only_errors"] : isset($_GET["import"]) || $_GET["only_errors"]), lang('Show only errors')) . "\n";
+echo checkbox("error_stops", 1, (isset($_POST["error_stops"]) ? $_POST["error_stops"] : isset($_GET["import"]) || (isset($_GET["error_stops"]) && $_GET["error_stops"])), lang('Stop on error')) . "\n";
+echo checkbox("only_errors", 1, (isset($_POST["only_errors"]) ? $_POST["only_errors"] : isset($_GET["import"]) || (isset($_GET["only_errors"]) && $_GET["only_errors"])), lang('Show only errors')) . "\n";
 echo "<input type='hidden' name='token' value='$token'>\n";
 
 if (!isset($_GET["import"]) && $history) {

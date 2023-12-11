@@ -5,7 +5,7 @@ function connect_error() {
 		header("HTTP/1.1 404 Not Found");
 		page_header(lang('Database') . ": " . h(DB), lang('Invalid database.'), true);
 	} else {
-		if ($_POST["db"] && !$error) {
+		if (isset($_POST["db"]) && $_POST["db"] && !$error) {
 			queries_redirect(substr(ME, 0, -1), lang('Databases have been dropped.'), drop_databases($_POST["db"]));
 		}
 
@@ -42,17 +42,17 @@ function connect_error() {
 				. "</thead>\n"
 			;
 
-			$databases = ($_GET["dbsize"] ? count_tables($databases) : array_flip($databases));
+			$databases = (isset($_GET["dbsize"]) && $_GET["dbsize"] ? count_tables($databases) : array_flip($databases));
 
 			foreach ($databases as $db => $tables) {
 				$root = h(ME) . "db=" . urlencode($db);
 				$id = h("Db-" . $db);
-				echo "<tr" . odd() . ">" . (support("database") ? "<td>" . checkbox("db[]", $db, in_array($db, (array) $_POST["db"]), "", "", "", $id) : "");
+				echo "<tr" . odd() . ">" . (support("database") ? "<td>" . checkbox("db[]", $db, in_array($db, (array) (isset($_POST["db"]) ? $_POST["db"] : [])), "", "", "", $id) : "");
 				echo "<th><a href='$root' id='$id'>" . h($db) . "</a>";
 				$collation = h(db_collation($db, $collations));
 				echo "<td>" . (support("database") ? "<a href='$root" . ($scheme ? "&amp;ns=" : "") . "&amp;database=' title='" . lang('Alter database') . "'>$collation</a>" : $collation);
-				echo "<td align='right'><a href='$root&amp;schema=' id='tables-" . h($db) . "' title='" . lang('Database schema') . "'>" . ($_GET["dbsize"] ? $tables : "?") . "</a>";
-				echo "<td align='right' id='size-" . h($db) . "'>" . ($_GET["dbsize"] ? db_size($db) : "?");
+				echo "<td align='right'><a href='$root&amp;schema=' id='tables-" . h($db) . "' title='" . lang('Database schema') . "'>" . (isset($_GET["dbsize"]) && $_GET["dbsize"] ? $tables : "?") . "</a>";
+				echo "<td align='right' id='size-" . h($db) . "'>" . (isset($_GET["dbsize"]) && $_GET["dbsize"] ? db_size($db) : "?");
 				echo "\n";
 			}
 
@@ -82,8 +82,8 @@ if (isset($_GET["import"])) {
 	$_GET["sql"] = $_GET["import"];
 }
 
-if (!(DB != "" ? $connection->select_db(DB) : isset($_GET["sql"]) || isset($_GET["dump"]) || isset($_GET["database"]) || isset($_GET["processlist"]) || isset($_GET["privileges"]) || isset($_GET["user"]) || isset($_GET["variables"]) || $_GET["script"] == "connect" || $_GET["script"] == "kill")) {
-	if (DB != "" || $_GET["refresh"]) {
+if (!(DB != "" ? $connection->select_db(DB) : isset($_GET["sql"]) || isset($_GET["dump"]) || isset($_GET["database"]) || isset($_GET["processlist"]) || isset($_GET["privileges"]) || isset($_GET["user"]) || isset($_GET["variables"]) || (isset($_GET["script"]) && $_GET["script"] == "connect") || (isset($_GET["script"]) && $_GET["script"] == "kill"))) {
+	if (DB != "" || (isset($_GET["refresh"]) && $_GET["refresh"])) {
 		restart_session();
 		set_session("dbs", null);
 	}

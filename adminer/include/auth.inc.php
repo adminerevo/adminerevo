@@ -119,7 +119,7 @@ function auth_error($error) {
 	$session_name = session_name();
 	if (isset($_GET["username"])) {
 		header("HTTP/1.1 403 Forbidden"); // 401 requires sending WWW-Authenticate header
-		if (($_COOKIE[$session_name] || $_GET[$session_name]) && !$has_token) {
+		if (((isset($_COOKIE[$session_name]) && $_COOKIE[$session_name]) || (isset($_GET[$session_name]) && $_GET[$session_name])) && !$has_token) {
 			$error = lang('Session expired, please login again.');
 		} else {
 			restart_session();
