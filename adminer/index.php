@@ -8,6 +8,9 @@
 */
 
 $GLOBALS['project'] = basename(dirname(__FILE__));
+$GLOBALS['config'] = [
+	'sql_edit_position' => 'below',
+];
 include "./include/bootstrap.inc.php";
 include "./include/tmpfile.inc.php";
 
