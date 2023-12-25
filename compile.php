@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
-function adminer_errors($errno, $errstr) {
-	return !!preg_match('~^(Trying to access array offset on value of type null|Undefined array key)~', $errstr);
+function adminer_errors($errNo, $errStr, $errFile, $errLine) {
+	file_put_contents("php://stderr", sprintf("%d - %s - %s:%d\n", $errNo, $errStr, $errFile, $errLine));
 }
 
 error_reporting(6135); // errors and warnings
@@ -37,7 +37,7 @@ function lang_ids($match) {
 	if ($lang_id === null) {
 		$lang_id = count($lang_ids) - 1;
 	}
-	return ($_SESSION["lang"] ? $match[0] : "lang($lang_id$match[2]");
+	return (isset($_SESSION["lang"]) && $_SESSION["lang"] ? $match[0] : "lang($lang_id$match[2]");
 }
 
 function put_file($match) {
@@ -64,7 +64,7 @@ header("Cache-Control: immutable");
 	if ($driver && dirname($match[2]) == "../adminer/drivers") {
 		$return = preg_replace('~^if \(isset\(\$_GET\["' . $driver . '"]\)\) \{(.*)^}~ms', '\1', $return);
 	}
-	if (basename($match[2]) != "lang.inc.php" || !$_SESSION["lang"]) {
+	if (basename($match[2]) != "lang.inc.php" || isset($_SESSION["lang"]) === false || !$_SESSION["lang"]) {
 		$return = str_replace('<?php echo $GLOBALS[\'project\']; ?>', $project, $return);
 		if (basename($match[2]) == "lang.inc.php") {
 			$return = str_replace('function lang($idf, $number = null) {', 'function lang($idf, $number = null) {
@@ -109,13 +109,15 @@ function lzw_compress($string) {
 	$word = "";
 	$codes = array();
 	for ($i=0; $i <= strlen($string); $i++) {
-		$x = @$string[$i];
-		if (strlen($x) && isset($dictionary[$word . $x])) {
-			$word .= $x;
-		} elseif ($i) {
-			$codes[] = $dictionary[$word];
-			$dictionary[$word . $x] = count($dictionary);
-			$word = $x;
+		if (isset($string[$i])) {
+			$x = $string[$i];
+			if (strlen($x) && isset($dictionary[$word . $x])) {
+				$word .= $x;
+			} elseif ($i) {
+				$codes[] = $dictionary[$word];
+				$dictionary[$word . $x] = count($dictionary);
+				$word = $x;
+			}
 		}
 	}
 	// convert codes to binary string
@@ -142,7 +144,7 @@ function lzw_compress($string) {
 
 function put_file_lang($match) {
 	global $lang_ids, $project, $langs;
-	if ($_SESSION["lang"]) {
+	if (isset($_SESSION["lang"]) && $_SESSION["lang"]) {
 		return "";
 	}
 	$return = "";
@@ -151,7 +153,9 @@ function put_file_lang($match) {
 		$translation_ids = array_flip($lang_ids); // default translation
 		foreach ($translations as $key => $val) {
 			if ($val !== null) {
-				$translation_ids[$lang_ids[$key]] = implode("\t", (array) $val);
+				if (isset($lang_ids[$key])) {
+					$translation_ids[$lang_ids[$key]] = implode("\t", (array) $val);
+				}
 			}
 		}
 		$return .= '
@@ -227,7 +231,11 @@ function php_shrink($input) {
 
 	foreach ($tokens as $i => $token) {
 		if ($token[0] === T_VARIABLE && !isset($special_variables[$token[1]])) {
-			$short_variables[$token[1]]++;
+			if (isset($short_variables[$token[1]]) === false) {
+				$short_variables[$token[1]] = 1;
+			} else {
+				$short_variables[$token[1]]++;
+			}
 		}
 	}
 
@@ -251,7 +259,7 @@ function php_shrink($input) {
 		if (!is_array($token)) {
 			$token = array(0, $token);
 		}
-		if ($tokens[$i+2][0] === T_CLOSE_TAG && $tokens[$i+3][0] === T_INLINE_HTML && $tokens[$i+4][0] === T_OPEN_TAG
+		if (isset($tokens[$i+2][0]) && $tokens[$i+2][0] === T_CLOSE_TAG && isset($tokens[$i+3][0]) && $tokens[$i+3][0] === T_INLINE_HTML && isset($tokens[$i+4][0]) && $tokens[$i+4][0] === T_OPEN_TAG
 			&& strlen(add_apo_slashes($tokens[$i+3][1])) < strlen($tokens[$i+3][1]) + 3
 		) {
 			$tokens[$i+2] = array(T_ECHO, 'echo');
@@ -312,7 +320,14 @@ function minify_js($file) {
 function compile_file($match) {
 	global $project;
 	$file = "";
-	list(, $filenames, $callback) = $match;
+	$filenames = null;
+	if (isset($match[1])) {
+		$filenames = $match[1];
+	}
+	$callback = null;
+	if (isset($match[2])) {
+		$callback = $match[2];
+	}
 	if ($filenames != "") {
 		foreach (explode(";", $filenames) as $filename) {
 			$file .= file_get_contents(dirname(__FILE__) . "/$project/$filename");
@@ -347,26 +362,28 @@ function ini_bool($ini) {
 
 
 $project = "adminer";
-if ($_SERVER["argv"][1] == "editor") {
+if (isset($_SERVER["argv"][1]) && $_SERVER["argv"][1] == "editor") {
 	$project = "editor";
 	array_shift($_SERVER["argv"]);
 }
 
 $driver = "";
-if (file_exists(dirname(__FILE__) . "/adminer/drivers/" . $_SERVER["argv"][1] . ".inc.php")) {
+if (isset($_SERVER["argv"][1]) && file_exists(dirname(__FILE__) . "/adminer/drivers/" . $_SERVER["argv"][1] . ".inc.php")) {
 	$driver = $_SERVER["argv"][1];
 	array_shift($_SERVER["argv"]);
 }
 
 unset($_COOKIE["adminer_lang"]);
-$_SESSION["lang"] = $_SERVER["argv"][1]; // Adminer functions read language from session
+if (isset($_SERVER["argv"][1])) {
+	$_SESSION["lang"] = $_SERVER["argv"][1]; // Adminer functions read language from session
+}
 include dirname(__FILE__) . "/adminer/include/lang.inc.php";
-if (isset($langs[$_SESSION["lang"]])) {
+if (isset($_SESSION["lang"]) && isset($langs[$_SESSION["lang"]])) {
 	include dirname(__FILE__) . "/adminer/lang/$_SESSION[lang].inc.php";
 	array_shift($_SERVER["argv"]);
 }
 
-if ($_SERVER["argv"][1]) {
+if (isset($_SERVER["argv"][1]) && $_SERVER["argv"][1]) {
 	echo "Usage: php compile.php [editor] [driver] [lang]\n";
 	echo "Purpose: Compile adminer[-driver][-lang].php or editor[-driver][-lang].php.\n";
 	exit(1);
@@ -441,7 +458,7 @@ if ($project == "editor") {
 $file = preg_replace_callback("~lang\\('((?:[^\\\\']+|\\\\.)*)'([,)])~s", 'lang_ids', $file);
 $file = preg_replace_callback('~\b(include|require) "([^"]*\$LANG.inc.php)";~', 'put_file_lang', $file);
 $file = str_replace("\r", "", $file);
-if ($_SESSION["lang"]) {
+if (isset($_SESSION["lang"]) && $_SESSION["lang"]) {
 	// single language version
 	$file = preg_replace_callback("~(<\\?php\\s*echo )?lang\\('((?:[^\\\\']+|\\\\.)*)'([,)])(;\\s*\\?>)?~s", 'remove_lang', $file);
 	$file = str_replace("<?php switch_lang(); ?>\n", "", $file);
@@ -459,6 +476,6 @@ $file = preg_replace('~"\.\./externals/jush/modules/(jush\.js)"~', $replace, $fi
 $file = preg_replace("~<\\?php\\s*\\?>\n?|\\?>\n?<\\?php~", '', $file);
 $file = php_shrink($file);
 
-$filename = $project . (preg_match('~-dev$~', $VERSION) ? "" : "-$VERSION") . ($driver ? "-$driver" : "") . ($_SESSION["lang"] ? "-$_SESSION[lang]" : "") . ".php";
+$filename = $project . (preg_match('~-dev$~', $VERSION) ? "" : "-$VERSION") . ($driver ? "-$driver" : "") . (isset($_SESSION["lang"]) && $_SESSION["lang"] ? "-$_SESSION[lang]" : "") . ".php";
 file_put_contents($filename, $file);
 echo "$filename created (" . strlen($file) . " B).\n";
