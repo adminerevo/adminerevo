@@ -880,6 +880,7 @@ class Adminer {
 						}
 						foreach ($row as $key => $val) {
 							if (isset($generatedKeys[$key])) {
+								unset($row[$key]);
 								continue;
                             }
 							$field = $fields[$key];
