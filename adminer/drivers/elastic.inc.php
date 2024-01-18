@@ -58,9 +58,15 @@ if (isset($_GET["elastic"])) {
 				return $this->rootQuery(($this->_db != "" ? "$this->_db/" : "/") . ltrim($path, '/'), $content, $method);
 			}
 
+			/**
+			 * @param string $server
+			 * @param string $username
+			 * @param string $password
+			 * @return bool
+			 */
 			function connect($server, $username, $password) {
-				preg_match('~^(https?://)?(.*)~', $server, $match);
-				$this->_url = ($match[1] ? $match[1] : "http://") . "$username:$password@$match[2]";
+				$this->_url = build_http_url($server, $username, $password, "localhost", 9200);
+
 				$return = $this->query('');
 				if ($return) {
 					$this->server_info = $return['version']['number'];
@@ -227,9 +233,6 @@ if (isset($_GET["elastic"])) {
 		global $adminer;
 		$connection = new Min_DB;
 		list($server, $username, $password) = $adminer->credentials();
-		if (strpos($server, '/') !== false || strpos($server, ':') !== false) {
-			return lang('Only hostname or IP address');
-		}
 		if ($password != "" && $connection->connect($server, $username, "")) {
 			return lang('Database does not support password.');
 		}
