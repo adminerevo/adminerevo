@@ -10,7 +10,7 @@ $translations = array(
 	'Logout' => 'Xx',
 	'Logged as: %s' => 'Xx: %s',
 	'Logout successful.' => 'Xx.',
-	'Invalid credentials.' => 'Xx.',
+	'Invalid server or credentials.' => 'Xx.',
 	'There is a space in the input password which might be the cause.' => 'Xx.',
 	'Adminer does not support accessing a database without a password, <a href="https://www.adminer.org/en/password/"%s>more information</a>.' => 'Xx, <a href="https://www.adminer.org/en/password/"%s>xx</a>.',
 	'Database does not support password.' => 'Xx.',

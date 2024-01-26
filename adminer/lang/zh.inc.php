@@ -10,7 +10,7 @@ $translations = array(
 	'Logout' => '登出',
 	'Logged as: %s' => '登录用户：%s',
 	'Logout successful.' => '成功登出。',
-	'Invalid credentials.' => '无效凭据。',
+	'Invalid server or credentials.' => null,
 	'There is a space in the input password which might be the cause.' => '您输入的密码中有一个空格，这可能是导致问题的原因。',
 	'Adminer does not support accessing a database without a password, <a href="https://www.adminer.org/en/password/"%s>more information</a>.' => 'Adminer默认不支持访问没有密码的数据库，<a href="https://www.adminer.org/en/password/"%s>详情见这里</a>.',
 	'Database does not support password.' => '数据库不支持密码。',
