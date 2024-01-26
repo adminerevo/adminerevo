@@ -10,7 +10,7 @@ $translations = array(
 	'Logout' => 'Wyloguj',
 	'Logged as: %s' => 'Zalogowany jako: %s',
 	'Logout successful.' => 'Wylogowano pomyślnie.',
-	'Invalid credentials.' => 'Nieprawidłowe dane logowania.',
+	'Invalid credentials.' => 'Nieprawidłowy serwer lub dane logowania.',
 	'Too many unsuccessful logins, try again in %d minute(s).' => array('Za dużo nieudanych prób logowania, spróbuj ponownie za %d minutę.', 'Za dużo nieudanych prób logowania, spróbuj ponownie za %d minuty.', 'Za dużo nieudanych prób logowania, spróbuj ponownie za %d minut.'),
 	'Master password expired. <a href="https://www.adminer.org/en/extension/"%s>Implement</a> %s method to make it permanent.' => 'Ważność hasła głównego wygasła. <a href="https://www.adminer.org/pl/extension/"%s>Zaimplementuj</a> własną metodę %s, aby ustawić je na stałe.',
 	'Language' => 'Język',
