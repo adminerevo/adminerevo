@@ -251,7 +251,8 @@ function php_shrink($input) {
 		if (!is_array($token)) {
 			$token = array(0, $token);
 		}
-		if ($tokens[$i+2][0] === T_CLOSE_TAG && $tokens[$i+3][0] === T_INLINE_HTML && $tokens[$i+4][0] === T_OPEN_TAG
+		if (!is_null($tokens[$i+2])
+			&& $tokens[$i+2][0] === T_CLOSE_TAG && $tokens[$i+3][0] === T_INLINE_HTML && $tokens[$i+4][0] === T_OPEN_TAG
 			&& strlen(add_apo_slashes($tokens[$i+3][1])) < strlen($tokens[$i+3][1]) + 3
 		) {
 			$tokens[$i+2] = array(T_ECHO, 'echo');
