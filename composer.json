@@ -1,14 +1,13 @@
 {
-    "name": "vrana/adminer",
+    "name": "adminerevo/adminerevo",
     "description": "Database management in a single PHP file.",
-    "homepage": "https://www.adminer.org/",
+    "homepage": "https://www.adminerevo.org/",
     "keywords": [
         "database"
     ],
     "support": {
-        "issues": "https://sourceforge.net/p/adminer/bugs-and-features/",
-        "forum": "https://sourceforge.net/p/adminer/discussion/",
-        "source": "https://github.com/vrana/adminer/"
+        "issues": "https://github.com/adminerevo/adminerevo/issues/",
+        "source": "https://github.com/adminerevo/adminerevo/"
     },
     "authors": [
         {
@@ -27,5 +26,19 @@
     ],
     "scripts": {
         "compile": "php compile.php"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/vrana/jush.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/vrana/jsshrink.git"
+        }
+    ],
+    "require": {
+        "vrana/jush": "dev-master#ae33623c66189375a3654954cddc1c73f65c36fa",
+        "vrana/jsshrink": "dev-master#96a466fa4cef74ba8362f4bc4b1bb17b2c9ecbcc"
     }
 }

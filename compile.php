@@ -7,7 +7,7 @@ function adminer_errors($errNo, $errStr, $errFile, $errLine) {
 error_reporting(6135); // errors and warnings
 set_error_handler('adminer_errors', E_WARNING);
 include dirname(__FILE__) . "/adminer/include/version.inc.php";
-include dirname(__FILE__) . "/externals/JsShrink/jsShrink.php";
+include dirname(__FILE__) . "/vendor/vrana/jsshrink/jsShrink.php";
 
 function add_apo_slashes($s) {
 	return addcslashes($s, "\\'");
@@ -443,7 +443,7 @@ if ($driver) {
 	if (count($drivers) == 1) {
 		$file = str_replace('<?php echo html_select("auth[driver]", $drivers, DRIVER) . "\n"; ?>', "<input type='hidden' name='auth[driver]' value='" . ($driver == "mysql" ? "server" : $driver) . "'>" . reset($drivers), $file);
 	}
-	$file = preg_replace('(;../externals/jush/modules/jush-(?!textarea\.|txt\.|js\.|' . preg_quote($driver == "mysql" ? "sql" : $driver) . '\.)[^.]+.js)', '', $file);
+	$file = preg_replace('(;../vendor/vrana/jush/modules/jush-(?!textarea\.|txt\.|js\.|' . preg_quote($driver == "mysql" ? "sql" : $driver) . '\.)[^.]+.js)', '', $file);
 	$file = preg_replace_callback('~doc_link\(array\((.*)\)\)~sU', function ($match) use ($driver) {
 		list(, $links) = $match;
 		$links = preg_replace("~'(?!(" . ($driver == "mysql" ? "sql|mariadb" : $driver) . ")')[^']*' => [^,]*,?~", '', $links);
@@ -452,8 +452,8 @@ if ($driver) {
 	//! strip doc_link() definition
 }
 if ($project == "editor") {
-	$file = preg_replace('~;.\.\/externals/jush/jush\.css~', '', $file);
-	$file = preg_replace('~compile_file\(\'\.\./(externals/jush/modules/jush\.js|adminer/static/[^.]+\.gif)[^)]+\)~', "''", $file);
+	$file = preg_replace('~;.\.\/vendor/vrana/jush/jush\.css~', '', $file);
+	$file = preg_replace('~compile_file\(\'\.\./(vendor/vrana/jush/modules/jush\.js|adminer/static/[^.]+\.gif)[^)]+\)~', "''", $file);
 }
 $file = preg_replace_callback("~lang\\('((?:[^\\\\']+|\\\\.)*)'([,)])~s", 'lang_ids', $file);
 $file = preg_replace_callback('~\b(include|require) "([^"]*\$LANG.inc.php)";~', 'put_file_lang', $file);
@@ -465,14 +465,14 @@ if (isset($_SESSION["lang"]) && $_SESSION["lang"]) {
 	$file = str_replace('<?php echo $LANG; ?>', $_SESSION["lang"], $file);
 }
 $file = str_replace('<?php echo script_src("static/editing.js"); ?>' . "\n", "", $file);
-$file = preg_replace('~\s+echo script_src\("\.\./externals/jush/modules/jush-(textarea|txt|js|\$jush)\.js"\);~', '', $file);
-$file = str_replace('<link rel="stylesheet" type="text/css" href="../externals/jush/jush.css">' . "\n", "", $file);
+$file = preg_replace('~\s+echo script_src\("\.\./vendor/vrana/jush/modules/jush-(textarea|txt|js|\$jush)\.js"\);~', '', $file);
+$file = str_replace('<link rel="stylesheet" type="text/css" href="../vendor/vrana/jush/jush.css">' . "\n", "", $file);
 $file = preg_replace_callback("~compile_file\\('([^']+)'(?:, '([^']*)')?\\)~", 'compile_file', $file); // integrate static files
 $replace = 'preg_replace("~\\\\\\\\?.*~", "", ME) . "?file=\1&version=' . $VERSION . '"';
 $file = preg_replace('~\.\./adminer/static/(default\.css|favicon\.ico)~', '<?php echo h(' . $replace . '); ?>', $file);
 $file = preg_replace('~"\.\./adminer/static/(functions\.js)"~', $replace, $file);
 $file = preg_replace('~\.\./adminer/static/([^\'"]*)~', '" . h(' . $replace . ') . "', $file);
-$file = preg_replace('~"\.\./externals/jush/modules/(jush\.js)"~', $replace, $file);
+$file = preg_replace('~"\.\./vendor/vrana/jush/modules/(jush\.js)"~', $replace, $file);
 $file = preg_replace("~<\\?php\\s*\\?>\n?|\\?>\n?<\\?php~", '', $file);
 $file = php_shrink($file);
 
