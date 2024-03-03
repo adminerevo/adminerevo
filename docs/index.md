@@ -13,7 +13,8 @@ It is available for download as a single self-contained PHP file, making it easy
 to deploy anywhere.
 </p>
 
-[Download](https://github.com/adminerevo/adminerevo){ .md-button .md-button--secondary target=\_blank }
+[Download](https://download.adminerevo.org){ .md-button .md-button--primary target=\_blank }
+[View Source](https://github.com/adminerevo/adminerevo){ .md-button .md-button--secondary target=\_blank }
 </div>
 
 <div class="clear"></div>
