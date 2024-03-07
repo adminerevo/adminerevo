@@ -260,7 +260,7 @@ ORDER BY ORDINAL_POSITION", null, "") as $row) { //! requires MySQL 5
 				echo "<div><select name='where[$i][col]'><option value=''>(" . lang('anywhere') . ")" . optionlist($columns, $val["col"], true) . "</select>";
 				echo html_select("where[$i][op]", array(-1 => "") + $this->operators, $val["op"]);
 				echo "<input type='search' name='where[$i][val]' value='" . h($val["val"]) . "'>" . script("mixin(qsl('input'), {onkeydown: selectSearchKeydown, onsearch: selectSearchSearch});", "");
-				echo '<button type="button" class="jsonly" title="', h(lang('remove')), '">x</button>' . script('qsl("button").onclick = selectRemoveRow;', "");
+				echo "<input type='image' src='../adminer/static/cross.gif' class='jsonly icon' title='", h(lang('Remove')), "' alt='x'>" . script('qsl(".icon").onclick = selectRemoveRow;', "");
 				echo "</div>\n";
 				$i++;
 			}
@@ -270,8 +270,8 @@ ORDER BY ORDINAL_POSITION", null, "") as $row) { //! requires MySQL 5
 		echo html_select("where[$i][op]", array(-1 => "") + $this->operators);
 		echo "<input type='search' name='where[$i][val]'>";
 		echo script("mixin(qsl('input'), {onchange: function () { this.parentNode.firstChild.onchange(); }, onsearch: selectSearchSearch});");
-		echo '<button type="button" class="jsonly" title="', h(lang('remove')), '">x</button>';
-		echo script('qsl("button").onclick = selectRemoveRow;', "");
+		echo "<input type='image' src='../adminer/static/cross.gif' class='jsonly icon' title='", h(lang('Remove')), "' alt='x'>";
+		echo script('qsl(".icon").onclick = selectRemoveRow;', "");
 		echo "</div>";
 		echo "</div></fieldset>\n";
 	}

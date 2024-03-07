@@ -33,8 +33,8 @@ input[type='submit'] { padding-left: 10px; padding-right: 10px; }
 select { border-radius: 5px; padding: 2px; vertical-align: middle;; }
 fieldset label input[type='checkbox'] { margin-bottom: 6px; }
 fieldset a { line-height: 20px; }
-#fieldset-select div:last-child > button, #fieldset-search div:last-child > button, #fieldset-sort div:last-child > button { display: none; }
-#fieldset-select button, #fieldset-search button, #fieldset-sort button { width: 16px; height: 16px; margin-bottom: 8px; line-height: 8px; border: 0px; }
+#fieldset-select .icon, #fieldset-search .icon, #fieldset-sort .icon { cursor: pointer; }
+#fieldset-select div:last-child > .icon, #fieldset-search div:last-child > .icon, #fieldset-sort div:last-child > .icon { display: none; }
 span.separator { margin-left: 5px; margin-right: 5px; }
 .block { display: block; }
 .version { color: #777; font-size: 50%; }

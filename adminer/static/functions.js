@@ -386,6 +386,10 @@ function selectAddRow() {
 	}
 	var inputs = qsa('input', row);
 	for (var i=0; i < inputs.length; i++) {
+		if (inputs[i].type === 'image') {
+			// button
+			continue;
+		}
 		inputs[i].name = inputs[i].name.replace(/[a-z]\[\d+/, '$&1');
 		inputs[i].className = '';
 		if (inputs[i].type == 'checkbox') {
@@ -394,7 +398,7 @@ function selectAddRow() {
 			inputs[i].value = '';
 		}
 	}
-	var buttons = qsa('button', row);
+	var buttons = qsa('.icon', row);
 	for (var i=0; i < buttons.length; i++) {
 		buttons[i].onclick = selectRemoveRow;
 	}
@@ -402,7 +406,7 @@ function selectAddRow() {
 }
 
 /** Remove a row in select fieldset
-* @this HTMLButtonElement
+* @this HTMLInputElement
 */
 function selectRemoveRow() {
 	var button = this;
@@ -411,9 +415,10 @@ function selectRemoveRow() {
 	while (nextRow = nextRow.nextSibling) {
 		if (nextRow.tagName === row.tagName) {
 			row.parentNode.removeChild(row);
-			return;
+			break;
 		}
 	}
+	return false;
 }
 
 /** Prevent onsearch handler on Enter
