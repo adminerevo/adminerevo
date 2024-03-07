@@ -3,19 +3,26 @@
 **Adminer** - Database management in a single PHP file  
 **Adminer Editor** - Data manipulation for end-users
 
-### A bit of history
+## A bit of history
 
 The original Adminer was created and maintained by Jakub Vrána in the [vrana/adminer](https://github.com/vrana/adminer) repository.
 Not being maintained for more than two years and being a daily user of Adminer, I've tried to get in touch with the original developer to propose my help to continue the project, but without success, I got no answer.
 I have then started to search if someone would be interested in continuing the project with me and found someone who seemed to have the same interest and view on the future of this project.
 I am now starting to take over the project under a slightly different name and will try to keep compatibility with all current database engines but also to give Adminer a new features, layout, etc.
 
-### Before participating
+## Before participating
 
 Before you start developing around AdminerEvo, please carefully read the roadmap, the status of open issues, and even get in touch with us.
 It would be sad spending time/energy on development of a feature which would not be accepted into the main project.
 
-### Information from the original developer
+## License
+
+This work is dual-licensed under Apache 2.0 and GPL 2.0.
+You can choose between either one of them if you use this work.
+
+`SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-only`
+
+## Information from the original developer
 
 |||
 |---|---|
