@@ -3,8 +3,20 @@ function adminer_errors($errno, $errstr) {
 	return !!preg_match('~^(Trying to access array offset on( value of type)? null|Undefined array key)~', $errstr);
 }
 
-error_reporting(6135); // errors and warnings
-set_error_handler('adminer_errors', E_WARNING);
+if (is_dir('sentry')) {
+	error_reporting(E_ERROR | E_PARSE);
+	require_once('sentry/vendor/autoload.php');
+	\Sentry\init([
+		'dsn' => 'https://a08396e6a19cf4de14e1818ffca9d088@o4506874261340160.ingest.us.sentry.io/4506887610105856',
+		// Specify a fixed sample rate
+		'traces_sample_rate' => 1.0,
+		// Set a sampling rate for profiling - this is relative to traces_sample_rate
+		'profiles_sample_rate' => 1.0,
+	]);
+} else {
+	error_reporting(6135); // errors and warnings
+	set_error_handler('adminer_errors', E_WARNING);
+}
 
 include "../adminer/include/coverage.inc.php";
 
