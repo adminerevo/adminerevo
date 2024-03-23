@@ -478,9 +478,30 @@ ORDER BY ORDINAL_POSITION", null, "") as $row) { //! requires MySQL 5
 
 	function editInput($table, $field, $attrs, $value) {
 		if ($field["type"] == "enum") {
-			return (isset($_GET["select"]) ? "<label><input type='radio'$attrs value='-1' checked><i>" . lang('original') . "</i></label> " : "")
-				. enum_input("radio", $attrs, $field, ($value || isset($_GET["select"]) ? $value : 0), ($field["null"] ? "" : null))
-			;
+			$options = array();
+			$selected = $value;
+			if (isset($_GET["select"])) {
+				$options[-1] = lang('original');
+				if ($selected === null) {
+					$selected = -1;
+				}
+			}
+			if ($field["null"]) {
+				$options[""] = "NULL";
+				if ($value === null && !isset($_GET["select"])) {
+					$selected = "";
+				}
+			}
+			$options[0] = lang('empty');
+			preg_match_all("~'((?:[^']|'')*)'~", $field["length"], $matches);
+			foreach ($matches[1] as $i => $val) {
+				$val = stripcslashes(str_replace("''", "'", $val));
+				$options[$i + 1] = $val;
+				if ($value === $val) {
+					$selected = $i + 1;
+				}
+			}
+			return "<select$attrs>" . optionlist($options, (string) $selected, 1) . "</select>"; // 1 - use keys
 		}
 		$options = $this->_foreignKeyOptions($table, $field["field"], $value);
 		if ($options !== null) {
