@@ -24,13 +24,14 @@ code { background: #eee; }
 tbody tr:hover td, tbody tr:hover th { background: #eee; }
 pre { margin: 1em 0 0; }
 pre, textarea { font: 100%/1.25 monospace; }
-input, button { vertical-align: middle; border-radius: 5px; padding: 2px; }
+input, button { vertical-align: middle; border-radius: 5px; padding: 2px; border-width: 1px; }
 input.default { box-shadow: 1px 1px 1px #777; }
 input.required { box-shadow: 1px 1px 1px red; }
 input.maxlength { box-shadow: 1px 1px 1px red; }
 input.wayoff { left: -1000px; position: absolute; }
 input[type='submit'] { padding-left: 10px; padding-right: 10px; }
-select { border-radius: 5px; padding: 2px; vertical-align: middle;; }
+select { border-radius: 5px; padding: 2px; vertical-align: middle; }
+table select { width: 100%; }
 fieldset label input[type='checkbox'] { margin-bottom: 6px; }
 fieldset a { line-height: 20px; }
 #fieldset-select .icon, #fieldset-search .icon, #fieldset-sort .icon { cursor: pointer; }
