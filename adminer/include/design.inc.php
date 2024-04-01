@@ -35,21 +35,9 @@ function page_header($title, $error = "", $breadcrumb = array(), $title2 = "") {
 <body class="<?php echo lang('ltr'); ?> nojs <?php echo $GLOBALS['project']; ?>">
 <?php
 	$filename = get_temp_dir() . "/adminer.version";
-	if (!$_COOKIE["adminer_version"] && function_exists('openssl_verify') && file_exists($filename) && filemtime($filename) + 86400 > time()) { // 86400 - 1 day in seconds
+	if (!$_COOKIE["adminer_version"] && file_exists($filename) && filemtime($filename) + 86400 > time()) { // 86400 - 1 day in seconds
 		$version = unserialize(file_get_contents($filename));
-		$public = "-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwqWOVuF5uw7/+Z70djoK
-RlHIZFZPO0uYRezq90+7Amk+FDNd7KkL5eDve+vHRJBLAszF/7XKXe11xwliIsFs
-DFWQlsABVZB3oisKCBEuI71J4kPH8dKGEWR9jDHFw3cWmoH3PmqImX6FISWbG3B8
-h7FIx3jEaw5ckVPVTeo5JRm/1DZzJxjyDenXvBQ/6o9DgZKeNDgxwKzH+sw9/YCO
-jHnq1cFpOIISzARlrHMa/43YfeNRAm/tsBXjSxembBPo7aQZLAWHmaj5+K19H10B
-nCpz9Y++cipkVEiKRGih4ZEvjoFysEOdRLj6WiD/uUNky4xGeA6LaJqh5XpkFkcQ
-fQIDAQAB
------END PUBLIC KEY-----
-";
-		if (openssl_verify($version["version"], base64_decode($version["signature"]), $public) == 1) {
-			$_COOKIE["adminer_version"] = $version["version"]; // doesn't need to send to the browser
-		}
+		$_COOKIE["adminer_version"] = $version["version"]; // doesn't need to send to the browser
 	}
 	?>
 <script<?php echo nonce(); ?>>
@@ -133,8 +121,8 @@ function csp() {
 	return array(
 		array(
 			"script-src" => "'self' 'unsafe-inline' 'nonce-" . get_nonce() . "' 'strict-dynamic'", // 'self' is a fallback for browsers not supporting 'strict-dynamic', 'unsafe-inline' is a fallback for browsers not supporting 'nonce-'
-			"connect-src" => "'self'",
-			"frame-src" => "https://www.adminer.org",
+			"connect-src" => "'self' https://api.github.com/repos/adminerevo/adminerevo/releases/latest",
+			"frame-src" => "'self'",
 			"object-src" => "'none'",
 			"base-uri" => "'none'",
 			"form-action" => "'self'",
