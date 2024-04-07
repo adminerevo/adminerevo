@@ -101,27 +101,22 @@ function cookie(assign, days) {
 */
 function verifyVersion(current, url, token) {
 	cookie('adminer_version=0', 1);
-	var iframe = document.createElement('iframe');
-	iframe.src = 'https://www.adminer.org/version/?current=' + current;
-	iframe.frameBorder = 0;
-	iframe.marginHeight = 0;
-	iframe.scrolling = 'no';
-	iframe.style.width = '7ex';
-	iframe.style.height = '1.25em';
-	if (window.postMessage && window.addEventListener) {
-		iframe.style.display = 'none';
-		addEventListener('message', function (event) {
-			if (event.origin == 'https://www.adminer.org') {
-				var match = /version=(.+)/.exec(event.data);
-				if (match) {
-					cookie('adminer_version=' + match[1], 1);
-					ajax(url + 'script=version', function () {
-					}, event.data + '&token=' + token);
-				}
+	ajax('https://api.github.com/repos/adminerevo/adminerevo/releases/latest', function (request) {
+		var data = window.JSON ? JSON.parse(request.responseText) : eval('(' + request.responseText + ')');
+		version = data.tag_name.replace(/[^\d.]/g, '');
+
+		if (version) {
+			cookie('adminer_version=' + version, 1);
+			var data = 'version=' + version;
+			ajax(url + 'script=version', function () {
+			}, data + '&token=' + token);
+
+			if (version != current) {
+				qs('#version').innerText = version;
 			}
-		}, false);
-	}
-	qs('#version').appendChild(iframe);
+		}
+
+	});
 }
 
 /** Get value of select
