@@ -305,4 +305,6 @@ $translations = array(
 	'Disable %s or enable %s or %s extensions.' => 'Désactiver %s ou activer %s or %s extensions.',
 
 	// 'Thanks for using Adminer, consider <a href="https://www.adminer.org/en/donation/">donating</a>.' => null,
+
+	'A newer version of AdminerEvo is available, download it now!' => null,
 );

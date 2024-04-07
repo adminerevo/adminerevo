@@ -304,5 +304,5 @@ $translations = array(
 	'Copy to clipboard' => 'Скопировать в буфер обмена',
 	'Disable %s or enable %s or %s extensions.' => 'Отключите %s или включите расширения %s или %s.',
 
-	
+	'A newer version of AdminerEvo is available, download it now!' => null,
 );
