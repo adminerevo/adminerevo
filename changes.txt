@@ -1,4 +1,16 @@
-Adminer 4.8.3 (released 2023-10-xx):
+Adminer 4.8.4 (released 2024-04-07):
+Removed size for integer on MySQL 8+
+Replaced deprecated by error_get_last()
+Allow responsive styles on larger devices (PR #75)
+Fixed issue with editor tables list
+Adjusted href of editor title
+Fixes of warnings on PHP8.3
+Filter removal buttons on table select pages (PR #77)
+Skip dump of generated columns (PR #95)
+Add LICENSE file, clarify dual-licensing (PR #122)
+Restore latest version check (PR #129)
+
+Adminer 4.8.3 (released 2023-10-05):
 Added some translations to russian language (PR #31)
 Better URL detection (PR #33)
 Main logo SVG, improved theme compatibility, RTL support (PR #34)
