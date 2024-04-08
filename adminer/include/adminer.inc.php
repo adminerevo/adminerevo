@@ -881,7 +881,7 @@ class Adminer {
 							if (!empty($fields[$field->name]['generated'])) {
 								$generatedKeys[$field->name] = true;
 								continue;
-                            }
+							}
 							$keys[] = $field->name;
 							$key = idf_escape($field->name);
 							$values[] = "$key = VALUES($key)";
@@ -902,7 +902,7 @@ class Adminer {
 							if (isset($generatedKeys[$key])) {
 								unset($row[$key]);
 								continue;
-                            }
+							}
 							$field = $fields[$key];
 							$row[$key] = ($val !== null
 								? unconvert_field($field, preg_match(number_type(), $field["type"]) && !preg_match('~\[~', $field["full_type"]) && is_numeric($val) ? $val : q(($val === false ? 0 : $val)))

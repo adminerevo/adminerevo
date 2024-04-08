@@ -193,7 +193,7 @@ legend a:link:hover {
 
 code {
 	/* background: none; */
-    padding: 3px 6px;
+	padding: 3px 6px;
 }
 
 p code,
@@ -259,7 +259,7 @@ p code + a:visited:hover {
 	padding-top: 9px;
 	text-transform: lowercase;
 	margin: 25px 0 10px 16px;
-    border-top: none;
+	border-top: none;
 }
 
 #menu h1 a {
