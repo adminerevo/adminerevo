@@ -306,5 +306,5 @@ $translations = array(
 
 	// 'Thanks for using Adminer, consider <a href="https://www.adminer.org/en/donation/">donating</a>.' => null,
 
-);
 	'A newer version of AdminerEvo is available, download it now!' => 'Stiahnite si novú verziu AdminerEvo!',
+);
