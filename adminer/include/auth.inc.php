@@ -35,12 +35,6 @@ function validate_server_input() {
 		auth_error(lang('Invalid server or credentials.'));
 	}
 
-	// Allow only host without a path. Note that "localhost" is parsed as path.
-	$host = (isset($parts['host']) ? $parts['host'] : '') . (isset($parts['path']) ? $parts['path'] : '');
-	if (strpos(rtrim($host, '/'), '/') !== false) {
-		auth_error(lang('Invalid server or credentials.'));
-	}
-
 	// Check privileged ports.
 	if (isset($parts['port']) && ($parts['port'] < 1024 || $parts['port'] > 65535)) {
 		auth_error(lang('Connecting to privileged ports is not allowed.'));
