@@ -884,21 +884,21 @@ function findDefaultSubmit(el) {
  * @param HTMLElement
  */
 function setupCopyToClipboard(document) {
-	var node = document.querySelector("a.copy-to-clipboard");
-	if (node) {
-		node.addEventListener("click", function() {
+	var node = document.querySelectorAll("a.copy-to-clipboard");
+	node.forEach(function(element) {
+		element.addEventListener("click", function() {
 			var nodeSql = document.querySelector("code.copy-to-clipboard");
 			if (nodeSql == null || nodeSql == undefined) {
 				nodeSql = document.querySelector("textarea.sqlarea");
 			}
 			if (nodeSql != null && nodeSql != undefined) {
-				if (node.classList.contains('expand')) {
-					document.getElementById(node.getAttribute('data-expand-id')).classList.remove("hidden");
+				if (element.classList.contains('expand')) {
+					document.getElementById(element.getAttribute('data-expand-id')).classList.remove("hidden");
 				}
 				copyToClipboard(nodeSql);
 			}
 		});
-	}
+	});
 }
 
 /** Copy element's content in clipboard
