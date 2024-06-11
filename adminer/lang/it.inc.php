@@ -278,7 +278,7 @@ $translations = array(
 	'Modify' => 'Modifica',
 	'Load more data' => 'Carica piú dati',
 	'Loading' => 'Caricamento',
-	'Copy to clipboard' => 'Copiato nella clipboard',
+	'Copy to clipboard' => 'Copia nella clipboard',
 	'ATTACH queries are not supported.' => 'ATTACH queries non sono supportate.',
 	'Warnings' => 'Attenzione',
 	'%d / ' => array('%d / '),
@@ -306,5 +306,5 @@ $translations = array(
 
 	// 'Thanks for using Adminer, consider <a href="https://www.adminer.org/en/donation/">donating</a>.' => null,
 
-	'A newer version of AdminerEvo is available, download it now!' => null,
+	'A newer version of AdminerEvo is available, download it now!' => 'È disponibile una nuova versione di AdminerEvo, scaricala adesso!',
 );
