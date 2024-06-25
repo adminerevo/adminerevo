@@ -146,16 +146,27 @@ if (isset($_GET["elastic"])) {
 					$data["query"]["ids"]["values"][] = $val;
 				}
 				elseif ($col . $val != "") {
-					$term = array("term" => array(($col != "" ? $col : "_all") => $val));
-					if ($op == "=") {
-						$data["query"]["filtered"]["filter"]["and"][] = $term;
+					if (min_version(7)) {
+						$colfilter = [($col != "" ? $col : "_all") => $val];
+						if ($op == "=") {
+							$data["query"]["bool"]["filter"][] = ['term' => $colfilter];
+						} else {
+							$data["query"]["bool"]["must"][] = ["match" => $colfilter];
+						}
 					} else {
-						$data["query"]["filtered"]["query"]["bool"]["must"][] = $term;
+						$term = array("term" => array(($col != "" ? $col : "_all") => $val));
+						if ($op == "=") {
+							$data["query"]["filtered"]["filter"]["and"][] = $term;
+						} else {
+							$data["query"]["filtered"]["query"]["bool"]["must"][] = $term;
+						}
 					}
 				}
 			}
-			if ($data["query"] && !$data["query"]["filtered"]["query"] && !$data["query"]["ids"]) {
-				$data["query"]["filtered"]["query"] = array("match_all" => array());
+			if (!min_version(7)) {
+				if ($data["query"] && !$data["query"]["filtered"]["query"] && !$data["query"]["ids"]) {
+					$data["query"]["filtered"]["query"] = array("match_all" => array());
+				}
 			}
 			$start = microtime(true);
 			$search = $this->_conn->query($query, $data);
