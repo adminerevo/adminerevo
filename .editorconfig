@@ -1,0 +1,6 @@
+# Automatically configure IDEs and editors
+# https://EditorConfig.org
+root = true
+
+[*.php]
+indent_style = tab
