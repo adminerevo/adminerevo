@@ -992,8 +992,14 @@ class Adminer {
 		global $VERSION, $jush, $drivers, $connection;
 		?>
 <h1>
-<?php echo $this->name(); ?> <span class="version"><?php echo $VERSION; ?></span>
-<a href="https://download.adminerevo.org/latest/adminer/"<?php echo target_blank(); ?> id="version" title="<?php echo lang('A newer version of AdminerEvo is available, download it now!'); ?>"><?php echo (version_compare($VERSION, $_COOKIE["adminer_version"]) < 0 ? h($_COOKIE["adminer_version"]) : ""); ?></a>
+    <?php
+    echo $this->name();
+    // Don't show version if not authenticated
+    if ($missing != "auth") {
+        echo ' <span class="version">' . $VERSION . '</span>';
+        echo ' <a href="https://download.adminerevo.org/latest/adminer/"' . target_blank() . ' id="version" title="' . lang('A newer version of AdminerEvo is available, download it now!') . '">' . (version_compare($VERSION, $_COOKIE["adminer_version"]) < 0 ? h($_COOKIE["adminer_version"]) : "") . '</a>';
+    }
+    ?>
 </h1>
 <?php
 		if ($missing == "auth") {
