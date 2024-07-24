@@ -10,3 +10,6 @@
 [submodule "designs/pepa-linha-dark"]
 	path = designs/pepa-linha-dark
 	url = https://github.com/pepa-linha/Adminer-Design-Dark
+[submodule "designs/rmsoft"]
+	path = designs/rmsoft
+	url = https://github.com/mesaros/adminerevo-theme-rmsoft
