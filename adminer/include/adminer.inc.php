@@ -118,15 +118,42 @@ class Adminer {
 	*/
 	function loginForm() {
 		global $drivers;
+
 		echo "<table cellspacing='0' class='layout'>\n";
-		echo $this->loginFormField('driver', '<tr><th>' . lang('System') . '<td>', html_select("auth[driver]", $drivers, DRIVER, "loginDriver(this);") . "\n");
-		echo $this->loginFormField('server', '<tr><th>' . lang('Server') . '<td>', '<input name="auth[server]" value="' . h(SERVER) . '" title="hostname[:port]" placeholder="localhost" autocapitalize="off">' . "\n");
-		echo $this->loginFormField('username', '<tr><th>' . lang('Username') . '<td>', '<input name="auth[username]" id="username" value="' . h($_GET["username"]) . '" autocomplete="username" autocapitalize="off">' . script("focus(qs('#username')); qs('#username').form['auth[driver]'].onchange();"));
-		echo $this->loginFormField('password', '<tr><th>' . lang('Password') . '<td>', '<input type="password" name="auth[password]" autocomplete="current-password">' . "\n");
+        echo $this->loginFormField('driver', '<tr><th>' . lang('System') . '<td>', html_select("auth[driver]", $drivers, DRIVER, "loginDriver(this);"));
+		echo $this->loginFormField('server', '<tr><th>' . lang('Server') . '<td>', '<input id="serverfield" name="auth[server]" value="' . h(SERVER) . '" title="hostname[:port]" placeholder="localhost" autocapitalize="off">' . "\n");
+		echo $this->loginFormField('username', '<tr><th>' . lang('Username') . '<td>', '<input id="usernamefield" name="auth[username]" id="username" value="' . h($_GET["username"]) . '" autocomplete="username" autocapitalize="off">' . script("focus(qs('#username')); qs('#username').form['auth[driver]'].onchange();"));
+		echo $this->loginFormField('password', '<tr><th>' . lang('Password') . '<td>', '<input id="passwordfield" type="password" name="auth[password]" autocomplete="current-password">' . "\n");
 		echo $this->loginFormField('db', '<tr><th>' . lang('Database') . '<td>', '<input name="auth[db]" value="' . h($_GET["db"]) . '" autocapitalize="off">' . "\n");
 		echo "</table>\n";
 		echo "<p><input type='submit' value='" . lang('Login') . "'>\n";
 		echo checkbox("auth[permanent]", 1, $_COOKIE["adminer_permanent"], lang('Permanent login')) . "\n";
+
+        echo script("
+        window.addEventListener('load', (event) => {
+            var authDriverSelect = document.getElementById('auth_driver');
+            var serverFieldRow = document.getElementById('serverfield').closest('tr');
+            var usernameFieldRow = document.getElementById('usernamefield').closest('tr');
+            var passwordFieldRow = document.getElementById('passwordfield').closest('tr');
+
+            function toggleFields() {
+                console.debug('toggleFields')
+                if (authDriverSelect.value === 'sqlite' || authDriverSelect.value === 'sqlite2') {
+                    passwordFieldRow.style.display = 'none';
+                    serverFieldRow.style.display = 'none';
+                    usernameFieldRow.style.display = 'none';
+                } else {
+                    passwordFieldRow.style.display = '';
+                    serverFieldRow.style.display = '';
+                    usernameFieldRow.style.display = '';
+                }
+            }
+
+            authDriverSelect.addEventListener('change', toggleFields);
+
+            toggleFields();
+        });");
+
 	}
 
 	/** Get login form field

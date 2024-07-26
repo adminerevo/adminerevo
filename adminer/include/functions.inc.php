@@ -220,6 +220,7 @@ function optionlist($options, $selected = null, $use_keys = false) {
 function html_select($name, $options, $value = "", $onchange = true, $labelled_by = "") {
 	if ($onchange) {
 		return "<select name='" . h($name) . "'"
+            . ($onchange === "loginDriver(this);" ? " id='auth_driver' " : "")
 			. ($labelled_by ? " aria-labelledby='$labelled_by'" : "")
 			. ">" . optionlist($options, $value) . "</select>"
 			. (is_string($onchange) ? script("qsl('select').onchange = function () { $onchange };", "") : "")
