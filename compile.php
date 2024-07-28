@@ -4,6 +4,9 @@ function adminer_errors($errno, $errstr) {
 	return !!preg_match('~^(Trying to access array offset on value of type null|Undefined array key)~', $errstr);
 }
 
+// A random sha1 hash to avoid caching
+$random_sha1 = sha1(microtime());
+
 error_reporting(6135); // errors and warnings
 set_error_handler('adminer_errors', E_WARNING);
 include dirname(__FILE__) . "/adminer/include/version.inc.php";
@@ -192,7 +195,7 @@ function short_identifier($number, $chars) {
 
 // based on http://latrine.dgx.cz/jak-zredukovat-php-skripty
 function php_shrink($input) {
-	global $VERSION;
+	global $VERSION, $random_sha1;
 	$special_variables = array_flip(array('$this', '$GLOBALS', '$_GET', '$_POST', '$_FILES', '$_COOKIE', '$_SESSION', '$_SERVER', '$http_response_header', '$php_errormsg'));
 	$short_variables = array();
 	$shortening = true;
@@ -452,7 +455,7 @@ $file = str_replace('<?php echo script_src("static/editing.js"); ?>' . "\n", "",
 $file = preg_replace('~\s+echo script_src\("\.\./externals/jush/modules/jush-(textarea|txt|js|\$jush)\.js"\);~', '', $file);
 $file = str_replace('<link rel="stylesheet" type="text/css" href="../externals/jush/jush.css">' . "\n", "", $file);
 $file = preg_replace_callback("~compile_file\\('([^']+)'(?:, '([^']*)')?\\)~", 'compile_file', $file); // integrate static files
-$replace = 'preg_replace("~\\\\\\\\?.*~", "", ME) . "?file=\1&version=' . $VERSION . '"';
+$replace = 'preg_replace("~\\\\\\\\?.*~", "", ME) . "?file=\1&version=' . $random_sha1 . '"';
 $file = preg_replace('~\.\./adminer/static/(default\.css|favicon\.ico)~', '<?php echo h(' . $replace . '); ?>', $file);
 $file = preg_replace('~"\.\./adminer/static/(functions\.js)"~', $replace, $file);
 $file = preg_replace('~\.\./adminer/static/([^\'"]*)~', '" . h(' . $replace . ') . "', $file);
