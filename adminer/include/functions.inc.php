@@ -491,6 +491,9 @@ function where($where, $fields = array()) {
 	global $connection, $jush;
 	$return = array();
 	foreach ((array) $where["where"] as $key => $val) {
+		if ($fields[$key]['type'] === 'json') {
+			continue;
+		}
 		$key = bracket_escape($key, 1); // 1 - back
 		$column = escape_key($key);
 		$return[] = $column
