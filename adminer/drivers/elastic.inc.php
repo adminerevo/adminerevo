@@ -373,7 +373,14 @@ if (isset($_GET["elastic"])) {
 			}
 		}
 
-		$return = array();
+		$return = array(
+			"_id" => [
+				"field" => "_id",
+				"full_type" => "keyword",
+				"type" => "keyword",
+				"privileges" => array("insert" => 0, "select" => 1, "update" => 0),
+			]
+		);
 		if ($mappings) {
 			foreach ($mappings as $name => $field) {
 				$return[$name] = array(
