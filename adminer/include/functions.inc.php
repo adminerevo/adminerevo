@@ -491,11 +491,14 @@ function where($where, $fields = array()) {
 	global $connection, $jush;
 	$return = array();
 	foreach ((array) $where["where"] as $key => $val) {
-		if ($fields[$key]['type'] === 'json') {
-			continue;
-		}
 		$key = bracket_escape($key, 1); // 1 - back
 		$column = escape_key($key);
+		if ($fields[$key]["type"] == "json") {
+			if($jush == "sql") {
+				$return[] = "$column = CAST(" . q($val) . " AS JSON)";
+			}
+			continue;
+		}
 		$return[] = $column
 			. ($jush == "sql" && is_numeric($val) && preg_match('~\.~', $val) ? " LIKE " . q($val) // LIKE because of floats but slow with ints
 				: ($jush == "mssql" ? " LIKE " . q(preg_replace('~[_%[]~', '[\0]', $val)) // LIKE because of text
