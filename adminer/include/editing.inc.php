@@ -26,6 +26,8 @@ function select($result, $connection2 = null, $orgtables = array(), $limit = 0) 
 				foreach ($fieldproperties as $fieldproperty) {
 					if(!isset($field->$fieldproperty)) {
 						$field->$fieldproperty = null;
+				
+					}
 				}
 				$name = $field->name;
 				$orgtable = $field->orgtable;
