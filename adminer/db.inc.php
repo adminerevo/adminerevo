@@ -65,7 +65,7 @@ if ($adminer->homepage()) {
 				}
 				echo "</div></fieldset>\n";
 				if ($_POST["search"] && $_POST["query"] != "") {
-					$_GET["where"][0]["op"] = $adminer->operator_regexp === null || empty($_POST['regexp']) ? $driver->convertOperator("LIKE %%") : $adminer->operator_regexp;
+					$_GET["where"][0]["op"] = $adminer->operator_regexp !== null && !empty($_POST['regexp']) ? $adminer->operator_regexp : $adminer->operator_like;
 					search_tables();
 				}
 			}
