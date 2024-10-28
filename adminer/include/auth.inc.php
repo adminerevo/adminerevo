@@ -57,7 +57,7 @@ function validate_server_input() {
  */
 function build_http_url($server, $username, $password, $defaultServer, $defaultPort = null) {
 	if (!preg_match('~^(https?://)?([^:]*)(:\d+)?$~', rtrim($server, '/'), $matches)) {
-		$this->error = lang('Invalid server or credentials.');
+		auth_error(lang('Invalid server or credentials.'));
 		return false;
 	}
 
