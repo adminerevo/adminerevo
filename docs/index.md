@@ -116,7 +116,7 @@ AdminerEvo and AdminerEvo Editor can be extended by plugins. [To use a plugin](#
 | [PHP Serialized Data](https://gist.github.com/donwilson/0bc0ec7c3701fb20747777a1a7b4cab4) | Don Wilson |  |
 | [readable-dates](https://gist.github.com/scr4bble/9ee4a9f1405ffc1465f59e03768e2768) | Dora Bulkins | Replaces UNIX timestamps with human-readable dates in your local format |
 | [resize](https://github.com/TiagoGilMarques/adminer.resize) | Tiago Gil Marques | Left column (tables) resizer (allow you to resize left table column) |
-| [restore-menu-scroll](https://gist.github.com/NoxArt/8085521) | Jiří Petruželka | Remembers and restores scollbar position of side menu |
+| [restore-menu-scroll](https://gist.github.com/NoxArt/8085521) | Jiří Petruželka | Remembers and restores scrollbar position of side menu |
 | [SchemaDefaultToPublic](https://github.com/MartinZubek/adminer-schema-default-to-public) | Martin Zubek |  |
 | [SearchAutocomplete](https://github.com/derStephan/AdminerPlugins/blob/master/searchAutocomplete.php) | Stephan |  |
 | [SQLite3 without password](https://github.com/FrancoisCapon/LoginToASqlite3DatabaseWithoutCredentialsWithAdminer) | François Capon |  |
