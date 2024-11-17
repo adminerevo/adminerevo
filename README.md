@@ -22,6 +22,9 @@ You can choose between either one of them if you use this work.
 
 `SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-only`
 
+## Direct download
+wget -c https://github.com/adminerevo/adminerevo/releases/download/v4.8.4/adminer-4.8.4.php -O adminer.php
+
 ## Information from the original developer
 
 |||
