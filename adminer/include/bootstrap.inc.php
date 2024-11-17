@@ -92,12 +92,14 @@ $types = $config['types'];
 $structured_types = $config['structured_types'];
 $unsigned = $config['unsigned'];
 $operators = $config['operators'];
-$operator_regexp = isset($config['operator_regexp']) && in_array($config['operator_regexp'], $operators) ? $config['operator_regexp'] : null;
+$operator_like = $config['operator_like'];
+$operator_regexp = $config['operator_regexp'];
 $functions = $config['functions'];
 $grouping = $config['grouping'];
 $edit_functions = $config['edit_functions'];
 if ($adminer->operators === null) {
 	$adminer->operators = $operators;
+	$adminer->operator_like = $operator_like;
 	$adminer->operator_regexp = $operator_regexp;
 }
 
