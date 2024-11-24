@@ -50,3 +50,5 @@ wget -c https://github.com/adminerevo/adminerevo/releases/download/v4.8.4/admine
 |`tests/katalon.html`|Katalon Automation Recorder test suite|
 
 If downloaded from Git then run: `git submodule update --init`
+
+This project is tested with BrowserStack.
