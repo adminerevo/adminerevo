@@ -59,10 +59,10 @@ if ($row["db"] != "") {
 if ($row["ns"] != "") {
 	set_schema($row["ns"]);
 }
-$referencable = array_keys(array_filter(table_status('', true), 'fk_support'));
-$target = array_keys(fields(in_array($row["table"], $referencable) ? $row["table"] : reset($referencable)));
+$referenceable = array_keys(array_filter(table_status('', true), 'fk_support'));
+$target = array_keys(fields(in_array($row["table"], $referenceable) ? $row["table"] : reset($referenceable)));
 $onchange = "this.form['change-js'].value = '1'; this.form.submit();";
-echo "<p>" . lang('Target table') . ": " . html_select("table", $referencable, $row["table"], $onchange) . "\n";
+echo "<p>" . lang('Target table') . ": " . html_select("table", $referenceable, $row["table"], $onchange) . "\n";
 if ($jush == "pgsql") {
 	echo lang('Schema') . ": " . html_select("ns", $adminer->schemas(), $row["ns"] != "" ? $row["ns"] : $_GET["ns"], $onchange);
 } elseif ($jush != "sqlite") {
