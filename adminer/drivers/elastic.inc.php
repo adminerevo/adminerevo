@@ -124,7 +124,7 @@ if (isset($_GET["elastic"])) {
 			$data = array();
 			$query = "$table/_search";
 			if ($select != array("*")) {
-				$data["fields"] = $select;
+				$data["fields"] = array_values($select);
 			}
 			if ($order) {
 				$sort = array();
