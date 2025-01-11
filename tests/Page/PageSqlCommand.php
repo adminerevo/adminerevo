@@ -16,8 +16,13 @@ class PageSqlCommand extends TestPage {
 	 * @return bool
 	 */
 	public function run_query(string $query): bool {
-		$this->webdriver->findElement(WebDriverBy::cssSelector('textarea[name="query"]'))->clear();
-		$this->webdriver->findElement(WebDriverBy::cssSelector('textarea[name="query"]'))->sendKeys($query);
+		try {
+			$this->webdriver->findElement(WebDriverBy::cssSelector('pre.jush-sql'))->clear();
+			$this->webdriver->findElement(WebDriverBy::cssSelector('pre.jush-sql'))->sendKeys($query);
+		} catch (NoSuchElementException $nsee) {
+			$this->webdriver->findElement(WebDriverBy::cssSelector('textarea[name="query"]'))->clear();
+			$this->webdriver->findElement(WebDriverBy::cssSelector('textarea[name="query"]'))->sendKeys($query);
+		}
 		$this->webdriver->findElement(WebDriverBy::cssSelector('input[type="submit"]'))->click();
 		try {
 			$this->webdriver->findElement(WebDriverBy::cssSelector('p.error'));
