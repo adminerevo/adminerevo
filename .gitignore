@@ -3,3 +3,5 @@
 /editor*.php
 /vendor/
 /.idea
+/tests/vendor
+/tests/config.json

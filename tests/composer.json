@@ -1,0 +1,9 @@
+{
+    "require": {
+	    "php-webdriver/webdriver": "^1.1",
+        "fakerphp/faker": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.4"
+    }
+}

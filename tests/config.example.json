@@ -1,0 +1,14 @@
+{
+	"selenium": {
+		"host": "http://localhost:4444/wd/hub",
+		"browser": "chrome"
+	},
+	"adminerevo": {
+		"host": "",
+		"system": "",
+		"server": "",
+		"username": "",
+		"password": "",
+		"database": ""
+	}
+}

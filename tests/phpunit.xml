@@ -1,0 +1,10 @@
+<phpunit>
+	<testsuites>
+		<testsuite name="Default Test Suite">
+			<directory>Scene</directory>
+		</testsuite>
+	</testsuites>
+	<php>
+		<var name="SELENIUM_HOST" value="http://localhost:4444/wd/hub"/>
+	</php>
+</phpunit>
