@@ -551,7 +551,7 @@ if (!defined("DRIVER")) {
 				"auto_increment" => ($row["Extra"] == "auto_increment"),
 				"on_update" => (preg_match('~^on update (.+)~i', $row["Extra"], $match) ? $match[1] : ""), //! available since MySQL 5.1.23
 				"collation" => $row["Collation"],
-				"privileges" => array_flip(preg_split('~, *~', $row["Privileges"])),
+				"privileges" => array_flip(preg_split('~, *~', $row["Privileges"])) + ["where" => 1, "order" => 1],
 				"comment" => $row["Comment"],
 				"primary" => ($row["Key"] == "PRI"),
 				// https://mariadb.com/kb/en/library/show-columns/, https://github.com/vrana/adminer/pull/359#pullrequestreview-276677186
@@ -1160,8 +1160,9 @@ if (!defined("DRIVER")) {
 			'structured_types' => $structured_types,
 			'unsigned' => array("unsigned", "zerofill", "unsigned zerofill"), ///< @var array number variants
 			'operators' => array("=", "<", ">", "<=", ">=", "!=", "LIKE", "LIKE %%", "REGEXP", "IN", "FIND_IN_SET", "IS NULL", "NOT LIKE", "NOT REGEXP", "NOT IN", "IS NOT NULL", "SQL"), ///< @var array operators used in select
-			'functions' => array("char_length", "date", "distinct", "from_unixtime", "unix_timestamp", "lower", "round", "floor", "ceil", "sec_to_time", "time_to_sec", "upper"), ///< @var array functions used in select
+			'operator_like' => "LIKE %%",
 			'operator_regexp' => 'REGEXP',
+			'functions' => array("char_length", "date", "distinct", "from_unixtime", "unix_timestamp", "lower", "round", "floor", "ceil", "sec_to_time", "time_to_sec", "upper"), ///< @var array functions used in select
 			'grouping' => array("avg", "count", "count distinct", "group_concat", "max", "min", "sum"), ///< @var array grouping functions used in select
 			'edit_functions' => array( ///< @var array of array("$type|$type2" => "$function/$function2") functions used in editing, [0] - edit and insert, [1] - edit only
 				array(

@@ -9,6 +9,8 @@ parse_str($_COOKIE["adminer_import"], $adminer_import);
 
 $rights = array(); // privilege => 0
 $columns = array(); // selectable columns
+$search_columns = array(); // searchable columns
+$order_columns = array(); // sortable columns
 $text_length = null;
 foreach ($fields as $key => $field) {
 	$name = $adminer->fieldName($field);
@@ -17,6 +19,12 @@ foreach ($fields as $key => $field) {
 		if (is_shortable($field)) {
 			$text_length = $adminer->selectLengthProcess();
 		}
+	}
+	if (isset($field["privileges"]["where"]) && $name != "") {
+		$search_columns[$key] = html_entity_decode(strip_tags($name), ENT_QUOTES);
+	}
+	if (isset($field["privileges"]["order"]) && $name != "") {
+		$order_columns[$key] = html_entity_decode(strip_tags($name), ENT_QUOTES);
 	}
 	$rights += $field["privileges"];
 }
@@ -246,8 +254,8 @@ if (!$columns && support("table")) {
 	echo '<input type="submit" value="' . h(lang('Select')) . '">'; # hidden default submit so filter remove buttons aren't "clicked" on submission from enter key
 	echo "</div>\n";
 	$adminer->selectColumnsPrint($select, $columns);
-	$adminer->selectSearchPrint($where, $columns, $indexes);
-	$adminer->selectOrderPrint($order, $columns, $indexes);
+	$adminer->selectSearchPrint($where, $search_columns, $indexes);
+	$adminer->selectOrderPrint($order, $order_columns, $indexes);
 	$adminer->selectLimitPrint($limit);
 	$adminer->selectLengthPrint($text_length);
 	$adminer->selectActionPrint($indexes);
@@ -332,12 +340,20 @@ if (!$columns && support("table")) {
 						$column = idf_escape($key);
 						$href = remove_from_uri('(order|desc)[^=]*|page') . '&order%5B0%5D=' . urlencode($key);
 						$desc = "&desc%5B0%5D=1";
+						$sortable = isset($field["privileges"]["order"]);
 						echo "<th id='th[" . h(bracket_escape($key)) . "]'>" . script("mixin(qsl('th'), {onmouseover: partial(columnMouse), onmouseout: partial(columnMouse, ' hidden')});", "");
-						echo '<a href="' . h($href . ($order[0] == $column || $order[0] == $key || (!$order && $is_group && $group[0] == $column) ? $desc : '')) . '">'; // $order[0] == $key - COUNT(*)
-						echo apply_sql_function(isset($val["fun"]) ? $val["fun"] : null, $name) . "</a>"; //! columns looking like functions
+						if ($sortable) {
+							echo '<a href="' . h($href . ($order[0] == $column || $order[0] == $key || (!$order && $is_group && $group[0] == $column) ? $desc : '')) . '">'; // $order[0] == $key - COUNT(*)
+						}
+						echo apply_sql_function(isset($val["fun"]) ? $val["fun"] : null, $name); //! columns looking like functions
+						if ($sortable) {
+							echo "</a>";
+						}
 						echo "<span class='column hidden'>";
-						echo "<a href='" . h($href . $desc) . "' title='" . lang('descending') . "' class='text'> ↓</a>";
-						if (isset($val["fun"]) === false) {
+						if ($sortable) {
+							echo "<a href='" . h($href . $desc) . "' title='" . lang('descending') . "' class='text'> ↓</a>";
+						}
+						if (isset($val["fun"]) === false && isset($field["privileges"]["where"])) {
 							echo '<a href="#fieldset-search" title="' . lang('Search') . '" class="text jsonly"> =</a>';
 							echo script("qsl('a').onclick = partial(selectSearch, '" . js_escape($key) . "');");
 						}

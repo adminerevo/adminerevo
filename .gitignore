@@ -5,3 +5,4 @@
 /.idea
 /tests/vendor
 /tests/config.json
+/.vscode

@@ -240,6 +240,15 @@ if (isset($_GET["clickhouse"])) {
 		return apply_queries("DROP TABLE", $tables);
 	}
 
+	/**
+	 * @param string $hostPath
+	 * @return bool
+	 */
+	function is_server_host_valid($hostPath)
+	{
+		return strpos(rtrim($hostPath, '/'), '/') === false;
+	}
+
 	function connect() {
 		global $adminer;
 		$connection = new Min_DB;
@@ -344,7 +353,7 @@ if (isset($_GET["clickhouse"])) {
 				"default" => trim($row['default_expression']),
 				"null" => $nullable,
 				"auto_increment" => '0',
-				"privileges" => array("insert" => 1, "select" => 1, "update" => 0),
+				"privileges" => array("insert" => 1, "select" => 1, "update" => 0, "where" => 1, "order" => 1),
 			);
 		}
 
@@ -418,6 +427,7 @@ if (isset($_GET["clickhouse"])) {
 			'structured_types' => $structured_types,
 			'unsigned' => array(),
 			'operators' => array("=", "<", ">", "<=", ">=", "!=", "~", "!~", "LIKE", "LIKE %%", "IN", "IS NULL", "NOT LIKE", "NOT IN", "IS NOT NULL", "SQL"),
+			'operator_like' => "LIKE %%",
 			'functions' => array(),
 			'grouping' => array("avg", "count", "count distinct", "max", "min", "sum"),
 			'edit_functions' => array(),

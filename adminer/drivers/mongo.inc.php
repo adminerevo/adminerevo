@@ -464,6 +464,8 @@ if (isset($_GET["mongo"])) {
 									"insert" => 1,
 									"select" => 1,
 									"update" => 1,
+									"where" => 1,
+									"order" => 1,
 								),
 							);
 						}
@@ -739,6 +741,7 @@ if (isset($_GET["mongo"])) {
 			'possible_drivers' => array("mongo", "mongodb"),
 			'jush' => "mongo",
 			'operators' => $operators,
+			'operator_like' => "LIKE %%", // TODO: LIKE operator is not listed in operators.
 			'operator_regexp' => $operator_regexp,
 			'functions' => array(),
 			'grouping' => array(),

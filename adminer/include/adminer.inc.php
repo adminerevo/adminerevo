@@ -3,7 +3,11 @@
 
 class Adminer {
 	/** @var array operators used in select, null for all operators */
-	var $operators;
+	var $operators = null;
+	/** @var string operator for LIKE condition */
+	var $operator_like = null;
+	/** @var string operator for regular expression condition */
+	var $operator_regexp = null;
 
 	/** Name in title and navigation
 	* @return string HTML code
@@ -296,7 +300,7 @@ class Adminer {
 		if (isset($field["type"]) && preg_match('~json~', $field["type"])) {
 			$return = "<code class='jush-js'>$return</code>";
 		}
-		return ($link ? "<a href='" . h($link) . "'" . (is_url($link) ? target_blank() : "") . ">$return</a>" : $return);
+		return ($link ? "<a href='" . h($link) . "'" . (is_web_url($link) ? target_blank() : "") . ">$return</a>" : $return);
 	}
 
 	/** Value conversion used in select and edit
@@ -305,6 +309,11 @@ class Adminer {
 	* @return string
 	*/
 	function editVal($val, $field) {
+		// Format Elasticsearch boolean value, but do not touch PostgreSQL boolean that use string value 't' or 'f'.
+		if ($field["type"] == "boolean" && is_bool($val)) {
+			return $val ? "true" : "false";
+		}
+
 		return $val;
 	}
 
@@ -575,9 +584,12 @@ class Adminer {
 					// find anywhere
 					$cols = array();
 					foreach ($fields as $name => $field) {
-						if ((preg_match('~^[-\d.' . (preg_match('~IN$~', $val["op"]) ? ',' : '') . ']+$~', $val["val"]) || !preg_match('~' . number_type() . '|bit~', $field["type"]))
+						if (isset($field["privileges"]["where"])
+                            && (preg_match('~^[-\d.' . (preg_match('~IN$~', $val["op"]) ? ',' : '') . ']+$~', $val["val"]) || !preg_match('~' . number_type() . '|bit~', $field["type"]))
 							&& (!preg_match("~[\x80-\xFF]~", $val["val"]) || preg_match('~char|text|enum|set~', $field["type"]))
 							&& (!preg_match('~date|timestamp~', $field["type"]) || preg_match('~^\d+-\d+-\d+~', $val["val"]))
+							&& (!preg_match('~^elastic~', DRIVER) || $field["type"] != "boolean" || preg_match('~true|false~', $val["val"])) // Elasticsearch needs boolean value properly formatted.
+							&& (!preg_match('~^elastic~', DRIVER) || strpos($val["op"], "regexp") === false || preg_match('~text|keyword~', $field["type"])) // Elasticsearch can use regexp only on text and keyword fields.
 						) {
 							$cols[] = $prefix . $driver->convertSearch(idf_escape($name), $val, $field) . $cond;
 						}
@@ -1130,7 +1142,7 @@ bodyLoad('<?php echo (is_object($connection) ? preg_replace('~^(\d\.?\d).*~s', '
 				;
 				echo (support("table") || support("indexes")
 					? '<a href="' . h(ME) . 'table=' . urlencode($table) . '"'
-						. bold(in_array($table, array($_GET["table"], $_GET["create"], $_GET["indexes"], $_GET["foreign"], $_GET["trigger"], $_GET["select"])), (is_view($status) ? "view" : "structure"))
+						. bold(in_array($table, array($_GET["table"], $_GET["create"], $_GET["indexes"], $_GET["foreign"], $_GET["trigger"], $_GET["select"], $_GET["edit"])), (is_view($status) ? "view" : "structure"))
 						. " title='" . lang('Show structure') . "'>$name</a>"
 					: "<span>$name</span>"
 				) . "\n";

@@ -321,7 +321,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 				"full_type" => $type,
 				"default" => (preg_match("~'(.*)'~", $default, $match) ? str_replace("''", "'", $match[1]) : ($default == "NULL" ? null : $default)),
 				"null" => !$row["notnull"],
-				"privileges" => array("select" => 1, "insert" => 1, "update" => 1),
+				"privileges" => array("select" => 1, "insert" => 1, "update" => 1, "where" => 1, "order" => 1),
 				"primary" => $row["pk"],
 			);
 			if ($row["pk"]) {
@@ -793,6 +793,7 @@ if (isset($_GET["sqlite"]) || isset($_GET["sqlite2"])) {
 			'structured_types' => array_keys($types),
 			'unsigned' => array(),
 			'operators' => array("=", "<", ">", "<=", ">=", "!=", "LIKE", "LIKE %%", "IN", "IS NULL", "NOT LIKE", "NOT IN", "IS NOT NULL", "SQL"), // REGEXP can be user defined function
+			'operator_like' => "LIKE %%",
 			'functions' => array("distinct", "hex", "length", "lower", "round", "unixepoch", "upper"),
 			'grouping' => array("avg", "count", "count distinct", "group_concat", "max", "min", "sum"),
 			'edit_functions' => array(

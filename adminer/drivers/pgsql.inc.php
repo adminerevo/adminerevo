@@ -376,7 +376,7 @@ ORDER BY a.attnum"
 			}
 			$row["null"] = !$row["attnotnull"];
 			$row["auto_increment"] = $row['attidentity'] || preg_match('~^nextval\(~i', $row["default"]);
-			$row["privileges"] = array("insert" => 1, "select" => 1, "update" => 1);
+			$row["privileges"] = array("insert" => 1, "select" => 1, "update" => 1, "where" => 1, "order" => 1);
 			if (preg_match('~(.+)::[^,)]+(.*)~', $row["default"], $match)) {
 				$row["default"] = ($match[1] == "NULL" ? null : idf_unescape($match[1]) . $match[2]);
 			}
@@ -910,6 +910,7 @@ AND typelem = 0"
 			'structured_types' => $structured_types,
 			'unsigned' => array(),
 			'operators' => array("=", "<", ">", "<=", ">=", "!=", "~", "~*", "!~", "!~*", "LIKE", "LIKE %%", "ILIKE", "ILIKE %%", "IN", "IS NULL", "NOT LIKE", "NOT IN", "IS NOT NULL"), // no "SQL" to avoid CSRF
+			'operator_like' => "LIKE %%",
 			'operator_regexp' => '~*',
 			'functions' => array("char_length", "distinct", "lower", "round", "to_hex", "to_timestamp", "upper"),
 			'grouping' => array("avg", "count", "count distinct", "max", "min", "sum"),

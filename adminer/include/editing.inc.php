@@ -72,7 +72,7 @@ function select($result, $connection2 = null, $orgtables = array(), $limit = 0) 
 						$link .= "&where" . urlencode("[" . bracket_escape($col) . "]") . "=" . urlencode($row[$j]);
 					}
 				}
-			} elseif (is_url($val)) {
+			} elseif (is_web_url($val)) {
 				$link = $val;
 			}
 			if ($val === null) {
@@ -86,7 +86,7 @@ function select($result, $connection2 = null, $orgtables = array(), $limit = 0) 
 				}
 			}
 			if ($link) {
-				$val = "<a href='" . h($link) . "'" . (is_url($link) ? target_blank() : '') . ">$val</a>";
+				$val = "<a href='" . h($link) . "'" . (is_web_url($link) ? target_blank() : '') . ">$val</a>";
 			}
 			echo "<td>$val";
 		}
@@ -540,6 +540,7 @@ function doc_link($paths, $text = "<sup>?</sup>") {
 		'pgsql' => "https://www.postgresql.org/docs/$version/",
 		'mssql' => "https://msdn.microsoft.com/library/",
 		'oracle' => "https://www.oracle.com/pls/topic/lookup?ctx=db" . preg_replace('~^.* (\d+)\.(\d+)\.\d+\.\d+\.\d+.*~s', '\1\2', $server_info) . "&id=",
+		'elastic' => "https://www.elastic.co/guide/en/elasticsearch/reference/$version/",
 	);
 	if (preg_match('~MariaDB~', $server_info)) {
 		$urls['sql'] = "https://mariadb.com/kb/en/library/";

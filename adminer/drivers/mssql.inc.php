@@ -387,7 +387,7 @@ WHERE o.schema_id = SCHEMA_ID(" . q(get_schema()) . ") AND o.type IN ('S', 'U', 
 				"null" => $row["is_nullable"],
 				"auto_increment" => $row["is_identity"],
 				"collation" => $row["collation_name"],
-				"privileges" => array("insert" => 1, "select" => 1, "update" => 1),
+				"privileges" => array("insert" => 1, "select" => 1, "update" => 1, "where" => 1, "order" => 1),
 				"primary" => $row["is_identity"], //! or indexes.is_primary_key
 				"comment" => $comments[$row["name"]],
 			);
@@ -664,6 +664,7 @@ WHERE sys1.xtype = 'TR' AND sys2.name = " . q($table)
 			'structured_types' => $structured_types,
 			'unsigned' => array(),
 			'operators' => array("=", "<", ">", "<=", ">=", "!=", "LIKE", "LIKE %%", "IN", "IS NULL", "NOT LIKE", "NOT IN", "IS NOT NULL"),
+			'operator_like' => "LIKE %%",
 			'functions' => array("distinct", "len", "lower", "round", "upper"),
 			'grouping' => array("avg", "count", "count distinct", "max", "min", "sum"),
 			'edit_functions' => array(

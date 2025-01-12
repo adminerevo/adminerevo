@@ -167,7 +167,14 @@ if (isset($_GET["oracle"])) {
 		}
 	}
 
-
+	/**
+	 * @param string $hostPath
+	 * @return bool
+	 */
+	function is_server_host_valid($hostPath) {
+		// EasyConnect host+path format: host[/[service_name][:server_type][/instance_name]]
+		return (bool)preg_match('~^[^/]+(/([^/:]+)?(:[^/:]+)?(/[^/:]+)?)?$~', $hostPath);
+	}
 
 	function idf_escape($idf) {
 		return '"' . str_replace('"', '""', $idf) . '"';
@@ -297,7 +304,7 @@ ORDER BY 1"
 				"null" => ($row["NULLABLE"] == "Y"),
 				//! "auto_increment" => false,
 				//! "collation" => $row["CHARACTER_SET_NAME"],
-				"privileges" => array("insert" => 1, "select" => 1, "update" => 1),
+				"privileges" => array("insert" => 1, "select" => 1, "update" => 1, "where" => 1, "order" => 1),
 				//! "comment" => $row["Comment"],
 				//! "primary" => ($row["Key"] == "PRI"),
 			);
@@ -523,6 +530,7 @@ ORDER BY PROCESS
 			'structured_types' => $structured_types,
 			'unsigned' => array(),
 			'operators' => array("=", "<", ">", "<=", ">=", "!=", "LIKE", "LIKE %%", "IN", "IS NULL", "NOT LIKE", "NOT REGEXP", "NOT IN", "IS NOT NULL", "SQL"),
+			'operator_like' => "LIKE %%",
 			'functions' => array("distinct", "length", "lower", "round", "upper"),
 			'grouping' => array("avg", "count", "count distinct", "max", "min", "sum"),
 			'edit_functions' => array(
