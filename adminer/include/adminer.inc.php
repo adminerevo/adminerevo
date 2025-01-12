@@ -739,7 +739,7 @@ class Adminer {
 			$selected = $value;
 			if (isset($_GET["select"])) {
 				$options[-1] = lang('original');
-				if ($selected === null) {
+				if ($selected === null || $selected === false) {
 					$selected = -1;
 				}
 			}
