@@ -289,11 +289,11 @@ class Adminer {
 	* @return string
 	*/
 	function selectVal($val, $link, $field, $original) {
-		$return = ($val === null ? "<i>NULL</i>" : (preg_match("~char|binary|boolean~", $field["type"] ?? null) && !preg_match("~var~", $field["type"] ?? null) ? "<code>$val</code>" : $val));
-		if (preg_match('~blob|bytea|raw|file~', $field["type"] ?? null) && !is_utf8($val)) {
+		$return = ($val === null ? "<i>NULL</i>" : (isset($field["type"]) && preg_match("~char|binary|boolean~", $field["type"]) && !preg_match("~var~", $field["type"]) ? "<code>$val</code>" : $val));
+		if (isset($field["type"]) && preg_match('~blob|bytea|raw|file~', $field["type"]) && !is_utf8($val)) {
 			$return = "<i>" . lang('%d byte(s)', strlen($original)) . "</i>";
 		}
-		if (preg_match('~json~', $field["type"] ?? null)) {
+		if (isset($field["type"]) && preg_match('~json~', $field["type"])) {
 			$return = "<code class='jush-js'>$return</code>";
 		}
 		return ($link ? "<a href='" . h($link) . "'" . (is_url($link) ? target_blank() : "") . ">$return</a>" : $return);
@@ -360,15 +360,15 @@ class Adminer {
 		$i = 0;
 		$select[""] = array();
 		foreach ($select as $key => $val) {
-			$val = $_GET["columns"][$key] ?? null;
+			$val = isset($_GET["columns"][$key]) ? $_GET["columns"][$key] : null;
 			$column = select_input(
 				" name='columns[$i][col]'",
 				$columns,
-				$val["col"] ?? null,
+				isset($val["col"]) ? $val["col"] : null,
 				($key !== "" ? "selectFieldChange" : "selectAddRow")
 			);
 			echo "<div>" . ($functions || $grouping ? "<select name='columns[$i][fun]'>"
-				. optionlist(array(-1 => "") + array_filter(array(lang('Functions') => $functions, lang('Aggregation') => $grouping)), $val["fun"] ?? null) . "</select>"
+				. optionlist(array(-1 => "") + array_filter(array(lang('Functions') => $functions, lang('Aggregation') => $grouping)), isset($val["fun"]) ? $val["fun"] : null) . "</select>"
 				. on_help("getTarget(event).value && getTarget(event).value.replace(/ |\$/, '(') + ')'", 1)
 				. script("qsl('select').onchange = function () { helpClose();" . ($key !== "" ? "" : " qsl('select, input', this.parentNode).onchange();") . " };", "")
 				. "($column)" : $column)
