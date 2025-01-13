@@ -29,7 +29,7 @@ Replaced Edit and Edit all of SQL Command history by icons
 Replaced icons from PNG to SVG to reduce CSS file size
 Make sure table is marked active in select mode
 Use links bar for "Create ..." functions (PR #51)
-Updates pepe-linha-dark submodule to the lastest commit (PR #54)
+Updates pepe-linha-dark submodule to the latest commit (PR #54)
 Fix issue with truncated queries and prevent copying queries > 1Mb to clipboard
 Added a clipboard icon next to SQL command to expand and copy to clipboard
 Added plugin documentation (PR #65)
@@ -96,7 +96,7 @@ PostgreSQL: Export all FKs after all CREATE TABLE (PR #351)
 PostgreSQL: Fix dollar-quoted syntax highlighting (bug #738)
 PostgreSQL: Do not show view definition from other schema (PR #392)
 PostgreSQL: Use bigserial for bigint auto increment (bug #765, regression from 3.0.0)
-PostgreSQL PDO: Support PgBouncer, unsupport PostgreSQL < 9.1 (bug #771)
+PostgreSQL PDO: Support PgBouncer, unsupported PostgreSQL < 9.1 (bug #771)
 PostgreSQL 10: Support GENERATED ALWAYS BY IDENTITY (PR #386)
 PostgreSQL 10: Support partitioned tables (PR #396)
 PostgreSQL 11: Create PRIMARY KEY for auto increment columns
@@ -291,7 +291,7 @@ MySQL: Remove dedicated view for replication status (added in 4.3.0)
 PostgreSQL: Sort table names (regression from 4.3.1)
 Editor: Don't set time zone from PHP, fixes DST
 Editor: Display field comment's text inside [] only in edit form
-Editor: Fix doubleclick on database page
+Editor: Fix double-click on database page
 Editor: Fix Search data in tables
 Customization: Always send security headers
 Hebrew translation
@@ -472,7 +472,7 @@ Allow exporting views dependent on each other (bug #214)
 Fix resetting search (bug #318)
 Don't use LIMIT 1 if updating unique row (bug #320)
 Restrict editing rows without unique identifier to search results
-Display navigation bellow main content on mobile browsers
+Display navigation below main content on mobile browsers
 Get number of rows on export page asynchronously
 Respect 'whole result' even if some rows are checked (bug #339 since Adminer 3.7.0)
 MySQL: Optimize create table page and Editor navigation

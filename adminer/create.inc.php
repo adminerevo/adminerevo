@@ -5,9 +5,9 @@ foreach (array('HASH', 'LINEAR HASH', 'KEY', 'LINEAR KEY', 'RANGE', 'LIST') as $
 	$partition_by[$key] = $key;
 }
 
-$referencable_primary = referencable_primary($TABLE);
+$referenceable_primary = referenceable_primary($TABLE);
 $foreign_keys = array();
-foreach ($referencable_primary as $table_name => $field) {
+foreach ($referenceable_primary as $table_name => $field) {
 	$foreign_keys[str_replace("`", "``", $table_name) . "`" . str_replace("`", "``", $field["field"])] = $table_name; // not idf_escape() - used in JS
 }
 
@@ -44,7 +44,7 @@ if ($_POST && !process_fields($row["fields"]) && !$error) {
 
 		foreach ($row["fields"] as $key => $field) {
 			$foreign_key = $foreign_keys[$field["type"]];
-			$type_field = ($foreign_key !== null ? $referencable_primary[$foreign_key] : $field); //! can collide with user defined type
+			$type_field = ($foreign_key !== null ? $referenceable_primary[$foreign_key] : $field); //! can collide with user defined type
 			if ($field["field"] != "") {
 				if (!$field["has_default"]) {
 					$field["default"] = null;
