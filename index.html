@@ -1,0 +1,969 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="AdminerEvo documentation">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.17">
+    
+    
+      
+        <title>AdminerEvo</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.bcfcd587.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="assets/local.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rationale" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="AdminerEvo" class="md-header__button md-logo" aria-label="AdminerEvo" data-md-component="logo">
+      
+  <img src="assets/logo-shield-white.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AdminerEvo
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/adminerevo/adminerevo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="AdminerEvo" class="md-nav__button md-logo" aria-label="AdminerEvo" data-md-component="logo">
+      
+  <img src="assets/logo-shield-white.svg" alt="logo">
+
+    </a>
+    AdminerEvo
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/adminerevo/adminerevo" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rationale" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rationale
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugins" class="md-nav__link">
+    <span class="md-ellipsis">
+      Plugins
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Plugins">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-contributed-plugins" class="md-nav__link">
+    <span class="md-ellipsis">
+      User contributed plugins
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#to-use-a-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      To use a plugin
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#history" class="md-nav__link">
+    <span class="md-ellipsis">
+      History
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#support" class="md-nav__link">
+    <span class="md-ellipsis">
+      Support
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Support">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#contributions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Contributions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Home</h1>
+
+<div class="grid-left">
+<p><img alt="image" class="index-logo" src="assets/logo.svg" /></p>
+</div>
+<div class="grid-right">
+<p>
+<b>AdminerEvo</b> is a web-based database management interface, with a focus on
+security, user experience, performance, functionality and size.
+</p>
+<p>
+It is available for download as a single self-contained PHP file, making it easy
+to deploy anywhere.
+</p>
+<p><a class="md-button md-button--primary" href="https://download.adminerevo.org" target="_blank">Download</a>
+<a class="md-button md-button--secondary" href="https://github.com/adminerevo/adminerevo" target="_blank">View Source</a></p>
+</div>
+<div class="clear"></div>
+
+<p>AdminerEvo works out of the box with MySQL, MariaDB, PostgreSQL, SQLite, MS SQL,
+Oracle, Elasticsearch and MongoDB. In addition, there are plugins for
+<a href="https://github.com/adminerevo/adminerevo/blob/main/plugins/drivers/simpledb.php">SimpleDB</a>,
+<a href="https://github.com/adminerevo/adminerevo/blob/main/plugins/drivers/firebird.php">Firebird</a> and
+<a href="https://github.com/adminerevo/adminerevo/blob/main/plugins/drivers/clickhouse.php">ClickHouse</a>.</p>
+<p>AdminerEvo is developed by the AdminerEvo community and is a continuation of
+the <a href="https://www.adminer.org/">Adminer</a> project by
+<a href="https://www.vrana.cz/">Jakub Vrána</a>.</p>
+<h2 id="rationale">Rationale</h2>
+<p>Existing database management interfaces often come in the form of desktop
+clients, or as large web applications. They often only support a single DBMS.</p>
+<p>Adminer aims to offer a familiar interface in a lightweight package, no matter
+the environment. The only requirement is a webserver configured to run a current
+version of <a href="https://php.net/">PHP</a>.</p>
+<h2 id="plugins">Plugins</h2>
+<p>AdminerEvo and AdminerEvo Editor can be extended by plugins. <a href="#to-use-a-plugin">To use a plugin</a></p>
+<table>
+<thead>
+<tr>
+<th>Name / link</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/plugin.php">plugin</a></td>
+<td>Required to run any plugin</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/database-hide.php">database-hide</a></td>
+<td>Hide some databases from the interface - just to improve design, not a security plugin</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/designs.php">designs</a></td>
+<td>Allow switching designs</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/dump-alter.php">dump-alter</a></td>
+<td>Exports one database (e.g. <code>development</code>) so that it can be synced with other database (e.g. <code>production</code>)</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/dump-bz2.php">dump-bz2</a></td>
+<td>Dump to Bzip2 format</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/dump-date.php">dump-date</a></td>
+<td>Include current date and time in export filename</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/dump-json.php">dump-json</a></td>
+<td>Dump to JSON format</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/dump-xml.php">dump-xml</a></td>
+<td>Dump to XML format in structure <code>&lt;database name="&gt;&lt;table name="&gt;&lt;column name="&gt;</code> value</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/dump-zip.php">dump-zip</a></td>
+<td>Dump to ZIP format</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/edit-calendar.php">edit-calendar</a></td>
+<td>Display <a href="http://jqueryui.com/">jQuery UI</a> <a href="http://trentrichardson.com/examples/timepicker/">Timepicker</a> for each date and datetime field</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/edit-foreign.php">edit-foreign</a></td>
+<td>Select foreign key in edit form</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/edit-textarea.php">edit-textarea</a></td>
+<td>Use <code>&lt;textarea&gt;</code> for <code>char</code> and <code>varchar</code></td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/enum-option.php">enum-option</a></td>
+<td>Use <code>&lt;select&gt;&lt;option&gt;</code> for <code>enum</code> edit instead of <code>&lt;input type="radio"&gt;</code></td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/enum-types.php">enum-types</a></td>
+<td>Use <code>&lt;select&gt;&lt;option&gt;</code> for <code>enum</code> edit instead of regular input text on enum type in PostgreSQL</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/file-upload.php">file-upload</a></td>
+<td>Edit fields ending with _path by <code>&lt;input type="file"&gt;</code> and link to the uploaded files from select</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/foreign-system.php">foreign-system</a></td>
+<td>Link system tables (in <code>mysql</code> and <code>information_schema</code> databases) by foreign keys</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/frames.php">frames</a></td>
+<td>Allow using Adminer inside a frame</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/json-column.php">json-column</a></td>
+<td>Display JSON values as table in edit</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/login-otp.php">login-otp</a></td>
+<td>Require One Time Password at login</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/login-servers.php">login-servers</a></td>
+<td>Display constant list of servers in login form</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/login-password-less.php">login-password-less</a></td>
+<td>Enable login without password (<a href="https://github.com/adminerevo/adminerevo/blob/main/adminer/sqlite.php">example</a>)</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/login-ssl.php">login-ssl</a></td>
+<td>Connect to MySQL using SSL</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/login-table.php">login-table</a></td>
+<td>Authenticate a user from the login table</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/master-slave.php">master-slave</a></td>
+<td>Execute writes on master and reads on slave</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/pretty-json-column.php">pretty-json-column</a></td>
+<td>Pretty print JSON values in edit</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/slugify.php">slugify</a></td>
+<td>Prefill field containing <code>_slug</code> with slugified value of a previous field (JavaScript)</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/sql-log.php">sql-log</a></td>
+<td>Log all queries to SQL file</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/struct-comments.php">struct-comments</a></td>
+<td>Show comments of sql structure in more places (mainly where you edit things)</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/tables-filter.php">tables-filter</a></td>
+<td>Filter names in tables list</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/tinymce.php">tinymce</a></td>
+<td>Edit all fields containing <code>_html</code> by HTML editor <a href="http://tinymce.moxiecode.com/">TinyMCE</a> and display the HTML in select</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/translation.php">translation</a></td>
+<td>Translate all table and field comments, enum and set values from the translation table (automatically inserts new translations)</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/version-noverify.php">version-noverify</a></td>
+<td>Disable version checker</td>
+</tr>
+<tr>
+<td><a href="https://raw.githubusercontent.com/adminerevo/adminerevo/master/plugins/wymeditor.php">wymeditor</a></td>
+<td>Edit all fields containing <code>_html</code> by HTML editor <a href="http://www.wymeditor.org/">WYMeditor</a> and display the HTML in select</td>
+</tr>
+</tbody>
+</table>
+<h3 id="user-contributed-plugins">User contributed plugins</h3>
+<table>
+<thead>
+<tr>
+<th>Name / link</th>
+<th>Author</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/LinkedList/Adminer-Allowed-Prefixes">allowed-prefixes</a></td>
+<td>Martin Macko</td>
+<td>Show only tables with user set prefixes</td>
+</tr>
+<tr>
+<td><a href="https://bitbucket.org/beholder/adminer-checkboxselect/src">checkbox-select</a></td>
+<td>Alexander Shabunevich</td>
+<td>Check multiple checkboxes at once by Shift+click.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/smuuf/adminer-colorfields">colorfields</a></td>
+<td>Prema van Smuuf</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://gist.github.com/raw/821510/convention-foreign-keys.php">convention-foreign-keys</a></td>
+<td>Ivan Nečas</td>
+<td>Links for foreign keys by convention <code>user_id =&gt; users.id</code></td>
+</tr>
+<tr>
+<td><a href="https://raw.github.com/Michal-Mikolas/Adminer-Editor-package/master/plugins/ConventionsForeignKeys.php">convention-foreign-keys</a></td>
+<td>Michal Mikoláš</td>
+<td>Links for foreign keys by convention <code>user_id =&gt; users.id</code></td>
+</tr>
+<tr>
+<td><a href="https://github.com/adilyildiz/AdminerCopy">AdminerCopy</a></td>
+<td>Adil Yildiz</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/margenn/adminer-camera-upload-plugin">Camera Upload</a></td>
+<td>Marcelo Gennari</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://gist.github.com/redfish-d86e/bd6e1bb86424bec46c1289a997cfe972">cellformula</a></td>
+<td>Tommy Tan</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/mmokross/AdminerCustomizeThemeBasedOnServer">CustomizeThemeBasedOnServer</a></td>
+<td>Michael Mokroß</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/icyz/adminer/blob/master/plugins/disable-tables.php">Disable tables</a></td>
+<td>Andrea Mariani</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://gist.github.com/anonymous/13b657087cf55323150c#file-display-foreign-key-name-php">DisplayForeignKeyName</a></td>
+<td>Bruno Vibert</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/sc419/AdminerDumpMarkdownDict">DumpMarkdownDict</a></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/fthiella/adminer-plugin-dump-markdown">dump-markdown</a></td>
+<td>Federico Thiella</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/Gobie/adminer-plugins">dump-xml-dataset</a></td>
+<td>Michal Brašna</td>
+<td>Dump to XML format specifically PHPUnit's XML DataSet structure</td>
+</tr>
+<tr>
+<td><a href="https://github.com/LinkedList/FasterTablesFilter">FasterTablesFilter</a></td>
+<td>Martin Macko</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://openuserjs.org/scripts/knedle/Adminer_-_favorites_tables">favorites tables</a></td>
+<td>Ladislav Ševcůj</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/arxeiss/Adminer-FillLoginForm">FillLoginForm</a></td>
+<td>Pavel Kutáč</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/icyz/adminer/blob/master/plugins/fk-disable.php">fk-disable</a></td>
+<td>Andrea Mariani</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/stano/adminer-floatThead">floatThead</a></td>
+<td>Stano Paška</td>
+<td>Floating table header plugin</td>
+</tr>
+<tr>
+<td><a href="https://gist.github.com/joshcangit/ad28f82baf1c9c2fab22dd9e8f39f799">folder-import</a></td>
+<td>Joshua</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/mhucik/AdminerForeignKeysPlugin">ForeignKeys</a></td>
+<td>Marek Hučík</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/raitocz/hidePgSchemas">hidePgSchemas</a></td>
+<td>Martin Jagr</td>
+<td>Hide schemas with <code>pg_</code> prefix</td>
+</tr>
+<tr>
+<td><a href="https://github.com/arxeiss/Adminer-HideTables">HideTables</a></td>
+<td>Pavel Kutáč</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/derStephan/AdminerPlugins/blob/master/hideableColumns.php">HideableColumns</a></td>
+<td>Stephan</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/arxeiss/adminer-input-uuid-generator">input-uuid-generator</a></td>
+<td>Pavel Kutáč</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/natanfelles/adminer-ispconfig">ispconfig</a></td>
+<td>Natan Felles</td>
+<td>Authenticate and auto-check host by ISPConfig Remote API</td>
+</tr>
+<tr>
+<td><a href="https://gist.github.com/marcbln/22dd713966cbda67af2e6bfc465a5c46">JsonVarDumper</a></td>
+<td>Marc Christenfeldt</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/crazy-max/login-servers-enhanced">login-servers-enhanced</a></td>
+<td>CrazyMax</td>
+<td>Fork of the official login-servers Adminer plugin with enhancements</td>
+</tr>
+<tr>
+<td><a href="https://gist.github.com/3423745">nette-user-login</a></td>
+<td>Mikuláš Dítě</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/giofreitas/one-click-login">one-click-login</a></td>
+<td>Sérgio Freitas</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/gremki/AdminerPHPExport">PHP Export</a></td>
+<td>Adrian Andreescu</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://gist.github.com/donwilson/0bc0ec7c3701fb20747777a1a7b4cab4">PHP Serialized Data</a></td>
+<td>Don Wilson</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://gist.github.com/scr4bble/9ee4a9f1405ffc1465f59e03768e2768">readable-dates</a></td>
+<td>Dora Bulkins</td>
+<td>Replaces UNIX timestamps with human-readable dates in your local format</td>
+</tr>
+<tr>
+<td><a href="https://github.com/TiagoGilMarques/adminer.resize">resize</a></td>
+<td>Tiago Gil Marques</td>
+<td>Left column (tables) resizer (allow you to resize left table column)</td>
+</tr>
+<tr>
+<td><a href="https://gist.github.com/NoxArt/8085521">restore-menu-scroll</a></td>
+<td>Jiří Petruželka</td>
+<td>Remembers and restores scollbar position of side menu</td>
+</tr>
+<tr>
+<td><a href="https://github.com/MartinZubek/adminer-schema-default-to-public">SchemaDefaultToPublic</a></td>
+<td>Martin Zubek</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/derStephan/AdminerPlugins/blob/master/searchAutocomplete.php">SearchAutocomplete</a></td>
+<td>Stephan</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/FrancoisCapon/LoginToASqlite3DatabaseWithoutCredentialsWithAdminer">SQLite3 without password</a></td>
+<td>François Capon</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/derStephan/AdminerPlugins/blob/master/stickyColumns.php">StickyColumns</a></td>
+<td>Stephan</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/icyz/adminer/blob/master/plugins/suggest-tablefields.php">suggest-tablefields</a></td>
+<td>Andrea Mariani</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/zhgabor/adminer-table-filter">table-filter</a></td>
+<td>Gábor Zabojszky-Horvath</td>
+<td>Quickly filtering tables, works only with custom themes where table list is floated</td>
+</tr>
+<tr>
+<td><a href="https://github.com/jnvsor/adminer-table-header-scroll/">table-header-scroll</a></td>
+<td>Jonathan Vollebregt</td>
+<td>Makes the table header scroll with the viewport</td>
+</tr>
+<tr>
+<td><a href="https://github.com/TiagoGilMarques/adminer.tablesCollapse">tablesCollapse</a></td>
+<td>Tiago Gil Marques</td>
+<td>Left column tables collapse (allows you to collapse tables, and translations tables with some sufix patterns, like phpmyadmin)</td>
+</tr>
+<tr>
+<td><a href="https://github.com/brunetton/adminer-tables_fuzzy_search">tables_fuzzy_search</a></td>
+<td>Bruno Duyé</td>
+<td>Fuzzy search (filter) in tables list</td>
+</tr>
+<tr>
+<td><a href="https://gist.github.com/aoloe/303f314aec36851d4c88">tables-history</a></td>
+<td>Ale Rimoldi</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/PetroKostyuk/adminer-tree-view">tree-view</a></td>
+<td>Petro Kostyuk</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/pematon/adminer-plugins">login-serversjson-previewsimple-menucollations</a></td>
+<td>Pematon</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/natanfelles/adminer-bootstrap-like">Adminer Bootstrap-Like Design</a></td>
+<td>Natan Felles</td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/pematon/adminer-theme">Theme for Adminer</a></td>
+<td>Pematon</td>
+<td>Responsive touch-friendly theme</td>
+</tr>
+<tr>
+<td><a href="https://github.com/felladrin/adminer-theme-switcher">Theme Switcher</a></td>
+<td>Victor Nogueira</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="to-use-a-plugin">To use a plugin</h3>
+<p>Create a PHP file specifying which plugins do you want to use:</p>
+<pre><code class="language-php">&lt;?php
+function adminer_object() {
+    // required to run any plugin
+    include_once &quot;./plugins/plugin.php&quot;;
+
+    // autoloader
+    foreach (glob(&quot;plugins/*.php&quot;) as $filename) {
+        include_once &quot;./$filename&quot;;
+    }
+
+    // enable extra drivers just by including them
+    //~ include &quot;./plugins/drivers/simpledb.php&quot;;
+
+    $plugins = array(
+        // specify enabled plugins here
+        new AdminerDumpXml(),
+        new AdminerTinymce(),
+        new AdminerFileUpload(&quot;data/&quot;),
+        new AdminerSlugify(),
+        new AdminerTranslation(),
+        new AdminerForeignSystem(),
+    );
+
+    /* It is possible to combine customization and plugins:
+    class AdminerCustomization extends AdminerPlugin {
+    }
+    return new AdminerCustomization($plugins);
+    */
+
+    return new AdminerPlugin($plugins);
+}
+
+// include original Adminer or Adminer Editor
+include &quot;./adminer.php&quot;;
+</code></pre>
+<h2 id="history">History</h2>
+<p>The project was started by Jakub Vrána as phpMinAdmin, with the aim of providing
+a light-weight alternative to phpMyAdmin. A 1.0.0 version was released on the
+11th of July 2007.</p>
+<p>Nearly two years later, Jakub renamed the project to Adminer, as its former name
+started as somewhat of a joke and caused confusion with the phpMyAdmin project.</p>
+<p>Around the same time, Jakub had an article published in the <em>php|architect</em>
+August 2009 edition, which he made available on his
+<a href="https://php.vrana.cz/architecture-of-adminer.php">blog</a>
+(<a href="https://archive.is/XjTDx">archive</a>). The article goes into detail about his
+ideas for Adminer and how it was designed. Some of this is still relevant today.</p>
+<p>A major announcement came the following year, with the release of 3.0.0. This
+release introduced support for multiple database drivers and already included
+SQLite, PostgreSQL, MS SQL and Oracle.</p>
+<p>In 2016 the project's source code was moved from its home on
+<a href="https://sourceforge.net/p/adminer/">SourceForge</a> to
+<a href="https://github.com/vrana/adminer/">GitHub</a>. Bug reports and user forums,
+however, remained where they were.</p>
+<p>Finally, in May of 2023, after a long period without released and with user
+contributions piling up without being merged, a group of individuals decided to
+join forces and revive the project as AdminerEvo.</p>
+<h2 id="support">Support</h2>
+<p>The community is available at
+<a href="https://github.com/adminerevo/adminerevo/discussions">GitHub Discussions</a> where
+we discuss ideas and issues.</p>
+<p>If you would like to report a bug, please look through the open
+<a href="https://github.com/adminerevo/adminerevo/issues">issues</a> or create a new one.</p>
+<h3 id="contributions">Contributions</h3>
+<p>We welcome <a href="https://github.com/adminerevo/adminerevo/pulls">pull requests</a>,
+however we suggest discussing your idea first via the
+<a href="https://github.com/adminerevo/adminerevo/discussions">discussion board</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/adminerevo/adminerevo" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs", "navigation.top", "toc.integrate", "content.code.annotate"], "search": "assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.1e8ae164.min.js"></script>
+      
+    
+  </body>
+</html>
