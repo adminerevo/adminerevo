@@ -1,3 +1,10 @@
+Facing personal problems which will still last some time, after what I will need some time to recover. I think it wouldn't be fair to let all of you expect something here which will take time to happen, while others are already busy on the same way.
+
+I've called for help, for a co-manager, without getting an answer; not being able to proceed as good as I would like, I'm going to close the repository. An option is to switch to pematon/adminer who has in his roadmap some elements I wanted to achieve.
+
+Thanks for your all your contributions of any mean,
+L.
+
 # AdminerEvo
 
 **Adminer** - Database management in a single PHP file  
