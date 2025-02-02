@@ -102,11 +102,11 @@ function select($result, $connection2 = null, $orgtables = array(), $limit = 0) 
 	return $return;
 }
 
-/** Get referencable tables with single column primary key except self
+/** Get referenceable tables with single column primary key except self
 * @param string
 * @return array ($table_name => $field)
 */
-function referencable_primary($self) {
+function referenceable_primary($self) {
 	$return = array(); // table_name => field
 	foreach (table_status('', true) as $table_name => $table) {
 		if ($table_name != $self && fk_support($table)) {
@@ -173,7 +173,7 @@ function textarea($name, $value, $rows = 10, $cols = 80) {
 * @param string
 * @param array
 * @param array
-* @param array returned by referencable_primary()
+* @param array returned by referenceable_primary()
 * @param array extra types to prepend
 * @return null
 */
@@ -272,7 +272,7 @@ function type_class($type) {
 * @param array
 * @param array
 * @param string TABLE or PROCEDURE
-* @param array returned by referencable_primary()
+* @param array returned by referenceable_primary()
 * @return null
 */
 function edit_fields($fields, $collations, $type = "TABLE", $foreign_keys = array()) {
@@ -561,7 +561,7 @@ function doc_link($paths, $text = "<sup>?</sup>") {
 * @return string
 */
 function ob_gzencode($string) {
-	// ob_start() callback recieves an optional parameter $phase but gzencode() accepts optional parameter $level
+	// ob_start() callback receives an optional parameter $phase but gzencode() accepts optional parameter $level
 	return gzencode($string);
 }
 
